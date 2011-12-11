@@ -1,0 +1,54 @@
+" Helpful links:
+" http://amix.dk/vim/vimrc.html
+" http://stackoverflow.com/questions/164847/what-is-in-your-vimrc
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set nocompatible
+set nobackup
+
+" Sets how many lines of history VIM has to remember
+set history=700
+
+" Enable filetype plugin
+filetype on
+filetype plugin on
+filetype indent on
+
+" Status line
+set ruler
+set showmode
+set wildmenu
+set laststatus=2
+
+" Backspace config
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Search
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+set showmatch
+
+" No sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+" Tabs and indents
+set smarttab
+set autoindent smartindent
+set tabstop=2
+
+" Allow command mode w/o shift
+nore ; :
+nore , ;
+"
+" Misc
+set shell=zsh
+
