@@ -1,16 +1,50 @@
-# Lines configured by zsh-newuser-install
+# Helpful links:
+# http://grml.org/zsh/zsh-lovers.html
+
+# History
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-bindkey -v
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/Jamie/.zshrc'
 
+# Emacs editing mode
+bindkey -e
+
+# Enable completions
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
+# Completion caching
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+# Ignore completion functions for commands you dont have
+zstyle ':completion:*:functions' ignored-patterns '_*'
+
+# Completing process IDs with menu selection
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:kill:*' force-list always
+
+# Extended globbing: http://zsh.sourceforge.net/Intro/intro_2.html
+setopt extendedglob
+
+# Prompt
 autoload -U colors && colors
 PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$reset_color%}%% "
+
+# CD aliases
+alias .='cd ../'
+alias ..='cd ../../'
+alias ...='cd ../../../'
+alias ....='cd ../../../../'
+
+# LS aliases
+alias ls='ls --color'
+alias la='ls -Ah'
+alias ll='ls -lh'
+alias lr='ls -tRh'
+alias lt='ls -lth'
+
+# Zsh
+alias rezsh='source ~/.zshrc'
+
 
