@@ -6,16 +6,17 @@
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Use vim defaults
 set nocompatible
-set nobackup
 
-" Sets how many lines of history VIM has to remember
-set history=700
+" History
+set history=100
 
 " Enable filetype plugin
 filetype on
 filetype plugin on
 filetype indent on
+syntax on
 
 " Status line
 set ruler
@@ -32,6 +33,8 @@ set ignorecase
 set smartcase
 set hlsearch
 set incsearch
+
+" Brackets
 set showmatch
 
 " No sound on errors
@@ -40,15 +43,33 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" Tabs and indents
+" Tabs and spaces
 set smarttab
-set autoindent smartindent
-set tabstop=2
+set expandtab
+set softtabstop=4
+set tabstop=4 
+set listchars=tab:>-,trail:-
+
+" Indents
+set autoindent
+set smartindent
+set shiftwidth=4
+
+" Folds
+set foldcolumn=2
+set foldmethod=indent
 
 " Allow command mode w/o shift
 nore ; :
 nore , ;
-"
-" Misc
-set shell=zsh
 
+" Cursor
+set scrolloff=1
+set whichwrap+=b,s,<,>,[,]
+
+" Misc
+set nobackup
+set shell=zsh
+set virtualedit=block
+
+" Commands
