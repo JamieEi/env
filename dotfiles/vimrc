@@ -16,6 +16,7 @@ set history=100
 filetype plugin on
 filetype indent on
 syntax on
+colorscheme koehler
 
 " Status line
 set ruler
@@ -78,15 +79,35 @@ set shell=zsh
 set virtualedit=block
 set lazyredraw
 
-" Commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Key Mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Windows
+if bufwinnr(1)
+    inoremap <s-up> <Esc><c-w>W<Ins>
+    inoremap <s-down> <Esc><c-w>w<Ins>
+    nnoremap <s-up> <c-w>W
+    nnoremap <s-down> <c-w>w
+
+    map + <c-w>+
+    map = <c-w>+
+    map - <c-w>-
+    map <c-=> <c-w>=
+endif
 
 " Remap broken meta-keys that send ^[
 for n in range(97,122) " ASCII a-z
     let c = nr2char(n)
-    exec "set <M-". c .">=\e". c
-    exec "map  \e". c ." <M-". c .">"
-    exec "map! \e". c ." <M-". c .">"
+    "exec "set <M-". c .">=\e". c
+    "exec "map  \e". c ." <M-". c .">"
+    "exec "map! \e". c ." <M-". c .">"
 endfor
+
+" Buffer switching
+map <C-j> :bprev<CR>
+map <C-k> :bnext<CR>
+set hidden " this will go along
 
 " Filetypes
 autocmd FileType vim setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4
