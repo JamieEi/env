@@ -13,7 +13,6 @@ set nocompatible
 set history=100
 
 " Enable filetype plugin
-filetype on
 filetype plugin on
 filetype indent on
 syntax on
@@ -24,15 +23,18 @@ set showmode
 set wildmenu
 set laststatus=2
 
-" Backspace config
+" Editing
+set completeopt=menu,longest,preview
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
+" set formatoptions+=tcrql
 
 " Search
 set ignorecase
 set smartcase
 set hlsearch
 set incsearch
+set matchtime=5
 
 " Brackets
 set showmatch
@@ -54,6 +56,9 @@ set listchars=tab:>-,trail:-
 set autoindent
 set smartindent
 set shiftwidth=4
+set shiftround
+set copyindent
+set preserveindent
 
 " Folds
 set foldcolumn=2
@@ -71,5 +76,23 @@ set whichwrap+=b,s,<,>,[,]
 set nobackup
 set shell=zsh
 set virtualedit=block
+set lazyredraw
 
 " Commands
+
+" Remap broken meta-keys that send ^[
+for n in range(97,122) " ASCII a-z
+    let c = nr2char(n)
+    exec "set <M-". c .">=\e". c
+    exec "map  \e". c ." <M-". c .">"
+    exec "map! \e". c ." <M-". c .">"
+endfor
+
+" Filetypes
+autocmd FileType vim setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4
+autocmd FileType sh setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4
+autocmd FileType ruby,scala setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType html,xhtml,xml setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType css setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
+autocmd FileType javascript setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+let javascript_enable_domhtmlcss=1
