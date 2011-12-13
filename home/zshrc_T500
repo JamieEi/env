@@ -1,0 +1,3 @@
+export PATH="/usr/local/bin:/usr/bin:/bin:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/bin/x64:/cygdrive/c/bin:/cygdrive/c/bin-local"
+
+source ~/env/dotfiles/zshrc

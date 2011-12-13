@@ -47,4 +47,8 @@ alias lt='ls -lth'
 # Zsh
 alias rezsh='source ~/.zshrc'
 
+# Local overrides
+if [[ -e ~/.zshrc_local ]]; then
+    source ~/.zshrc_local
+fi
 
