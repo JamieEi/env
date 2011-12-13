@@ -1,7 +1,4 @@
 " Helpful links:
-"
-" " Mintty application escape mode
-
 " http://amix.dk/vim/vimrc.html
 " http://stackoverflow.com/questions/164847/what-is-in-your-vimrc
 
@@ -67,6 +64,7 @@ set preserveindent
 " Folds
 set foldcolumn=2
 set foldmethod=indent
+set nofoldenable
 
 " Allow command mode w/o shift
 nore ; :
