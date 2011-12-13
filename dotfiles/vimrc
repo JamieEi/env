@@ -1,4 +1,7 @@
 " Helpful links:
+"
+" " Mintty application escape mode
+
 " http://amix.dk/vim/vimrc.html
 " http://stackoverflow.com/questions/164847/what-is-in-your-vimrc
 
@@ -108,6 +111,13 @@ endfor
 map <C-j> :bprev<CR>
 map <C-k> :bnext<CR>
 set hidden " this will go along
+
+" Mintty application escape mode
+"let &t_ti.="\e[?7727h"
+"let &t_te.="\e[?7727l"
+"noremap <Esc>O[ <Esc>
+"noremap! <Esc>O[ <Esc> " vi default
+"noremap! <Esc>O[ <C-c> " vim default
 
 " Filetypes
 autocmd FileType vim setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4

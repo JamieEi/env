@@ -1,0 +1,7 @@
+BoldAsFont=no
+CursorType=underscore
+CursorBlinks=yes
+Font=Consolas
+Columns=100
+Rows=40
+PgUpDnScroll=yes
