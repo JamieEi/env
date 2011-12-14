@@ -18,6 +18,8 @@ Bundle 'gmarik/vundle'
 
 " My Bundles here:
 Bundle 'majutsushi/tagbar'
+Bundle 'desert-warm-256'
+
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
 "Bundle 'L9'
@@ -35,7 +37,7 @@ set history=100
 
 " Colors
 syntax on
-colorscheme koehler
+colorscheme desert-warm-256
 
 " Status line
 set ruler
@@ -126,7 +128,7 @@ endfor
 " Buffer switching
 map <C-j> :bprev<CR>
 map <C-k> :bnext<CR>
-set hidden " this will go along
+set hidden
 
 " Mintty application escape mode
 "let &t_ti.="\e[?7727h"
