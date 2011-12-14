@@ -10,6 +10,7 @@ set nocompatible
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 filetype off
+let $GIT_SSL_NO_VERIFY = 'true'
 
 set runtimepath+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -19,6 +20,7 @@ Bundle 'gmarik/vundle'
 " My Bundles here:
 Bundle 'majutsushi/tagbar'
 Bundle 'desert-warm-256'
+Bundle 'https://github.com/fholgado/minibufexpl.vim.git'
 
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
