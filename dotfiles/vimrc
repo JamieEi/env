@@ -1,23 +1,39 @@
 " Helpful links:
-"
-" " Mintty application escape mode
-
 " http://amix.dk/vim/vimrc.html
 " http://stackoverflow.com/questions/164847/what-is-in-your-vimrc
+
+set nocompatible
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Vundle: https://github.com/gmarik/vundle
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+filetype off
+
+set runtimepath+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"Bundle 'tpope/vim-fugitive'
+"Bundle 'Lokaltog/vim-easymotion'
+"Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+"Bundle 'tpope/vim-rails.git'
+"Bundle 'L9'
+"Bundle 'FuzzyFinder'
+"Bundle 'git://git.wincent.com/command-t.git'
+
+filetype plugin indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Use vim defaults
-set nocompatible
-
 " History
 set history=100
 
-" Enable filetype plugin
-filetype plugin on
-filetype indent on
+" Colors
 syntax on
 colorscheme koehler
 
@@ -65,8 +81,8 @@ set copyindent
 set preserveindent
 
 " Folds
-set foldcolumn=2
-set foldmethod=indent
+"set foldcolumn=2
+"set foldmethod=indent
 
 " Allow command mode w/o shift
 nore ; :
