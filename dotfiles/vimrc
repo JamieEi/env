@@ -21,6 +21,8 @@ Bundle 'gmarik/vundle'
 Bundle 'majutsushi/tagbar'
 Bundle 'desert-warm-256'
 Bundle 'https://github.com/fholgado/minibufexpl.vim.git'
+Bundle 'SuperTab-continued.'
+Bundle 'YankRing.vim'
 
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
