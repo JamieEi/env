@@ -51,6 +51,13 @@ set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 " set formatoptions+=tcrql
 
+" Cut & paste
+set pastetoggle=<F2>
+
+" Use Q for formatting the current paragraph (or selection)
+vmap Q gq
+nmap Q gqap
+
 " Search
 set ignorecase
 set smartcase
@@ -104,26 +111,27 @@ set lazyredraw
 " => Key Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Windows
-if bufwinnr(1)
-    inoremap <s-up> <Esc><c-w>W<Ins>
-    inoremap <s-down> <Esc><c-w>w<Ins>
-    nnoremap <s-up> <c-w>W
-    nnoremap <s-down> <c-w>w
+" Allow Alt/Meta modifiers
+set winaltkeys=no
 
-    map + <c-w>+
-    map = <c-w>+
-    map - <c-w>-
-    map <c-=> <c-w>=
-endif
+" Window navigation
+map <m-left> <c-w><left>
+map <m-up> <c-w><up>
+map <m-down> <c-w><down>
+map <m-right> <c-w><right>
 
-" Remap broken meta-keys that send ^[
-for n in range(97,122) " ASCII a-z
-    let c = nr2char(n)
-    "exec "set <M-". c .">=\e". c
-    "exec "map  \e". c ." <M-". c .">"
-    "exec "map! \e". c ." <M-". c .">"
-endfor
+" Window movement
+map <m-s-left> <c-w>H
+map <m-s-down> <c-w>J
+map <m-s-up> <c-w>K
+map <m-s-right> <c-w>L
+
+" Window resizing
+map <m-,> <c-w><
+map <m-down> <c-w>-
+map <m-up> <c-w>+
+map <m-.> <c-w>>
+map <m-=> <c-w>=
 
 " Buffer switching
 map <C-j> :bprev<CR>
