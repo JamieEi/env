@@ -1,6 +1,7 @@
 " Helpful links:
 " http://amix.dk/vim/vimrc.html
 " http://stackoverflow.com/questions/164847/what-is-in-your-vimrc
+" https://github.com/mutewinter/dot_vim/blob/master/vimrc
 
 set nocompatible
 
@@ -16,13 +17,12 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " My Bundles here:
+Bundle 'majutsushi/tagbar'
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
-"Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-"Bundle 'tpope/vim-rails.git'
 "Bundle 'L9'
 "Bundle 'FuzzyFinder'
-"Bundle 'git://git.wincent.com/command-t.git'
+"Bundle 'git://git.wincent.com/command-t.git' 
 
 filetype plugin indent on
 
