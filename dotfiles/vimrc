@@ -30,6 +30,9 @@ Bundle 'YankRing.vim'
 "Bundle 'FuzzyFinder'
 "Bundle 'git://git.wincent.com/command-t.git' 
 
+let g:yankring_history_dir = '~/.vim'
+let g:yankring_history_file = '.yankring_history_file'
+
 filetype plugin indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
