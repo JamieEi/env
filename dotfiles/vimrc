@@ -31,7 +31,7 @@ Bundle 'YankRing.vim'
 "Bundle 'git://git.wincent.com/command-t.git' 
 
 let g:yankring_history_dir = '~/.vim'
-let g:yankring_history_file = '.yankring_history_file'
+let g:yankring_history_file = 'yankring_history'
 
 filetype plugin indent on
 
@@ -41,6 +41,7 @@ filetype plugin indent on
 
 " History
 set history=100
+set viminfo+=n~/.vim/viminfo
 
 " Colors
 syntax on
