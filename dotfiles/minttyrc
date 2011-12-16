@@ -5,5 +5,5 @@ Font=Consolas
 Columns=100
 Rows=40
 PgUpDnScroll=yes
-ZoomShortcuts=no
+ZoomShortcuts=yes
 RightClickAction=paste
