@@ -23,6 +23,8 @@ Bundle 'desert-warm-256'
 Bundle 'https://github.com/fholgado/minibufexpl.vim.git'
 Bundle 'SuperTab-continued.'
 Bundle 'YankRing.vim'
+Bundle 'bdd/vim-scala'
+Bundle 'ervandew/screen'
 
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
