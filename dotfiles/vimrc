@@ -111,6 +111,15 @@ nore , ;
 set scrolloff=1
 set whichwrap+=b,s,<,>,[,]
 
+" Swap files must die
+if has("win32") || has("win64")
+    set backupdir=$TMP
+    set directory=$TMP
+else
+    set backupdir=~/backup,~/backups,~/var/tmp,~/tmp
+    set directory=~/backup,~/backups,~/var/tmp,~/tmp
+end 
+
 " Misc
 set nobackup
 set shell=zsh

@@ -6,6 +6,8 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 
+export LESS="-r"
+
 # Emacs editing mode
 bindkey -e
 
@@ -27,6 +29,10 @@ zstyle ':completion:*:kill:*' force-list always
 # Extended globbing: http://zsh.sourceforge.net/Intro/intro_2.html
 setopt extendedglob
 
+# Misc options
+# http://zsh.sourceforge.net/Doc/Release/Options.html
+setopt auto_cd
+
 # Prompt
 autoload -U colors && colors
 PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$reset_color%}%% "
@@ -46,6 +52,33 @@ alias lt='ls -lth'
 
 # Zsh
 alias rezsh='source ~/.zshrc'
+
+# key bindings
+bindkey "\e[1~" beginning-of-line
+bindkey "\e[4~" end-of-line
+bindkey "\e[5~" beginning-of-history
+bindkey "\e[6~" end-of-history
+bindkey "^[[3~" delete-char
+bindkey "^[3;5~" delete-char
+bindkey "\e[2~" quoted-insert
+bindkey "\e[5C" forward-word
+bindkey "\eOc" emacs-forward-word
+bindkey "\e[5D" backward-word
+bindkey "\eOd" emacs-backward-word
+bindkey "\ee[C" forward-word
+bindkey "\ee[D" backward-word
+bindkey "^H" backward-delete-word
+# for rxvt
+bindkey "\e[8~" end-of-line
+bindkey "\e[7~" beginning-of-line
+# for non RH/Debian xterm, can't hurt for RH/DEbian xterm
+bindkey "\eOH" beginning-of-line
+bindkey "\eOF" end-of-line
+# for freebsd console
+bindkey "\e[H" beginning-of-line
+bindkey "\e[F" end-of-line
+# completion in the middle of a line
+bindkey '^i' expand-or-complete-prefix
 
 # Local overrides
 if [[ -e ~/.zshrc_local ]]; then
