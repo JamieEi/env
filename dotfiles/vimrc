@@ -116,8 +116,8 @@ if has("win32") || has("win64")
     set backupdir=$TMP
     set directory=$TMP
 else
-    set backupdir=~/backup,~/backups,~/var/tmp,~/tmp
-    set directory=~/backup,~/backups,~/var/tmp,~/tmp
+    set backupdir=~/backup,~/backups,/var/tmp,/tmp
+    set directory=~/backup,~/backups,/var/tmp,/tmp
 end 
 
 " Misc
