@@ -52,8 +52,12 @@ colorscheme desert-warm-256
 " Status line
 set ruler
 set showmode
-set wildmenu
 set laststatus=2
+
+" Completion
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.o,*.obj,*.bak,*.bk,*~
 
 " Editing
 set completeopt=menu,longest,preview
@@ -109,6 +113,9 @@ nore , ;
 
 " Cursor
 set scrolloff=1
+set sidescrolloff=15
+set sidescroll=1
+set nowrap
 set whichwrap+=b,s,<,>,[,]
 
 " Swap files must die
