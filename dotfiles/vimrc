@@ -25,6 +25,8 @@ Bundle 'SuperTab-continued.'
 Bundle 'YankRing.vim'
 Bundle 'bdd/vim-scala'
 Bundle 'ervandew/screen'
+Bundle 'groenewege/vim-less'
+Bundle 'hail2u/vim-css3-syntax'
 
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
