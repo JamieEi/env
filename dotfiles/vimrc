@@ -27,6 +27,8 @@ Bundle 'ervandew/screen'
 Bundle 'derekwyatt/vim-scala'
 Bundle 'othree/html5.vim'
 Bundle 'gre/play2vim'
+Bundle 'groenewege/vim-less'
+Bundle 'hail2u/vim-css3-syntax'
 
 "Bundle 'tpope/vim-fugitive'
 "Bundle 'Lokaltog/vim-easymotion'
@@ -54,8 +56,12 @@ colorscheme desert-warm-256
 " Status line
 set ruler
 set showmode
-set wildmenu
 set laststatus=2
+
+" Completion
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.o,*.obj,*.bak,*.bk,*~
 
 " Editing
 set completeopt=menu,longest,preview
@@ -111,6 +117,9 @@ nore , ;
 
 " Cursor
 set scrolloff=1
+set sidescrolloff=15
+set sidescroll=1
+set nowrap
 set whichwrap+=b,s,<,>,[,]
 
 " Swap files must die
@@ -165,9 +174,6 @@ set hidden
 "noremap <Esc>O[ <Esc>
 "noremap! <Esc>O[ <Esc> " vi default
 "noremap! <Esc>O[ <C-c> " vim default
-
-" Paste from clipboard
-inoremap <S-Insert> <ESC>"+p`]a
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => File types
