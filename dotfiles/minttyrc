@@ -1,9 +1,10 @@
 BoldAsFont=no
-CursorType=underscore
-CursorBlinks=yes
+CursorType=block
+CursorBlinks=no
 Font=Consolas
 Columns=100
 Rows=40
 PgUpDnScroll=yes
 ZoomShortcuts=yes
 RightClickAction=paste
+CtrlShiftShortcuts=yes
