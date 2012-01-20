@@ -23,8 +23,10 @@ Bundle 'desert-warm-256'
 Bundle 'https://github.com/fholgado/minibufexpl.vim.git'
 Bundle 'SuperTab-continued.'
 Bundle 'YankRing.vim'
-Bundle 'bdd/vim-scala'
 Bundle 'ervandew/screen'
+Bundle 'derekwyatt/vim-scala'
+Bundle 'othree/html5.vim'
+Bundle 'gre/play2vim'
 Bundle 'groenewege/vim-less'
 Bundle 'hail2u/vim-css3-syntax'
 
@@ -173,7 +175,10 @@ set hidden
 "noremap! <Esc>O[ <Esc> " vi default
 "noremap! <Esc>O[ <C-c> " vim default
 
-" Filetypes
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => File types
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 autocmd FileType vim setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4
 autocmd FileType sh setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4
 autocmd FileType ruby,scala setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
