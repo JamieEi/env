@@ -50,6 +50,9 @@ alias ll='ls -lh'
 alias lr='ls -tRh'
 alias lt='ls -lth'
 
+# Fix slow git completions: http://talkings.org/post/5236392664/zsh-and-slow-git-completion
+__git_files () { _wanted files expl 'local files' _files }
+
 # Zsh
 alias rezsh='source ~/.zshrc'
 
