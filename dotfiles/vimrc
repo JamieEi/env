@@ -17,10 +17,13 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-" My Bundles here:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => My Bundles
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 Bundle 'majutsushi/tagbar'
 Bundle 'desert-warm-256'
-Bundle 'https://github.com/fholgado/minibufexpl.vim.git'
+Bundle 'fholgado/minibufexpl'
 Bundle 'SuperTab-continued.'
 Bundle 'YankRing.vim'
 Bundle 'ervandew/screen'
