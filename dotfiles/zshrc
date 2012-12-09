@@ -1,5 +1,7 @@
 # Helpful links:
 # http://grml.org/zsh/zsh-lovers.html
+# http://blog.andrewhays.net/love-your-terminal
+# http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 
 # History
 HISTFILE=~/.histfile
