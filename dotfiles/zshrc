@@ -11,6 +11,7 @@
 alias rezsh='source ~/.zshrc'
 alias userls='cat /etc/passwd | cut -d: -f1 | sort'
 alias groupls='cat /etc/group | cut -d: -f1 | sort'
+alias pacup='pacup.rb && sudo pacman -Suy'
 
 # cd
 alias .='cd ../'
@@ -108,13 +109,27 @@ autoload -U colors && colors
 PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$reset_color%}%% "
 
 #--------------------------------------------------------------------------------
-# Finale
+# Local overrides
 #--------------------------------------------------------------------------------
 
-# Local overrides
 if [[ -e ~/.zshrc_local ]]; then
     source ~/.zshrc_local
 fi
+
+#--------------------------------------------------------------------------------
+# Path
+#--------------------------------------------------------------------------------
+
+# Add to path
+path+=~/scripts
+
+# Remove any entries that don't exist
+# http://stackoverflow.com/questions/9347478/how-to-edit-path-variable-in-zsh
+path=($^path(N))
+
+#--------------------------------------------------------------------------------
+# Finale
+#--------------------------------------------------------------------------------
 
 # Start @ home
 cd
