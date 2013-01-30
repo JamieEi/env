@@ -3,15 +3,39 @@
 # http://blog.andrewhays.net/love-your-terminal
 # http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 
+#--------------------------------------------------------------------------------
+# Aliases
+#--------------------------------------------------------------------------------
+
+# new commands
+alias rezsh='source ~/.zshrc'
+alias userls='cat /etc/passwd | cut -d: -f1 | sort'
+alias groupls='cat /etc/group | cut -d: -f1 | sort'
+
+# cd
+alias .='cd ../'
+alias ..='cd ../../'
+alias ...='cd ../../../'
+alias ....='cd ../../../../'
+
+# ls
+alias ls='ls --color'
+alias la='ls -Ah'
+alias ll='ls -lh'
+alias lr='ls -tRh'
+alias lt='ls -lth'
+
+#--------------------------------------------------------------------------------
 # History
+#--------------------------------------------------------------------------------
+
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 
-export LESS="-r"
-
-# Emacs editing mode
-bindkey -e
+#--------------------------------------------------------------------------------
+# Completions
+#--------------------------------------------------------------------------------
 
 # Enable completions
 autoload -Uz compinit
@@ -28,37 +52,16 @@ zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:kill:*' force-list always
 
-# Extended globbing: http://zsh.sourceforge.net/Intro/intro_2.html
-setopt extendedglob
-
-# Misc options
-# http://zsh.sourceforge.net/Doc/Release/Options.html
-setopt auto_cd
-
-# Prompt
-autoload -U colors && colors
-PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$reset_color%}%% "
-
-# CD aliases
-alias .='cd ../'
-alias ..='cd ../../'
-alias ...='cd ../../../'
-alias ....='cd ../../../../'
-
-# LS aliases
-alias ls='ls --color'
-alias la='ls -Ah'
-alias ll='ls -lh'
-alias lr='ls -tRh'
-alias lt='ls -lth'
-
 # Fix slow git completions: http://talkings.org/post/5236392664/zsh-and-slow-git-completion
 __git_files () { _wanted files expl 'local files' _files }
 
-# Zsh
-alias rezsh='source ~/.zshrc'
+#--------------------------------------------------------------------------------
+# Key bindings
+#--------------------------------------------------------------------------------
 
-# key bindings
+# Emacs editing mode
+bindkey -e
+
 bindkey "\e[1~" beginning-of-line
 bindkey "\e[4~" end-of-line
 bindkey "\e[5~" beginning-of-history
@@ -88,9 +91,30 @@ bindkey '^i' expand-or-complete-prefix
 # Alternate / much smaller solution to the same end by adding the following to your .zshrc:
 # eval "$(sed -n 's/^/bindkey /; s/: / /p' /etc/inputrc)"
 
+#--------------------------------------------------------------------------------
+# Misc 
+#--------------------------------------------------------------------------------
+
+export LESS="-r"
+
+# Extended globbing: http://zsh.sourceforge.net/Intro/intro_2.html
+setopt extendedglob
+
+# http://zsh.sourceforge.net/Doc/Release/Options.html
+setopt auto_cd
+
+# Prompt
+autoload -U colors && colors
+PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$reset_color%}%% "
+
+#--------------------------------------------------------------------------------
+# Finale
+#--------------------------------------------------------------------------------
+
 # Local overrides
 if [[ -e ~/.zshrc_local ]]; then
     source ~/.zshrc_local
 fi
 
+# Start @ home
 cd
