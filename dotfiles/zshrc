@@ -11,7 +11,7 @@
 alias rezsh='source ~/.zshrc'
 alias userls='cat /etc/passwd | cut -d: -f1 | sort'
 alias groupls='cat /etc/group | cut -d: -f1 | sort'
-alias pacup='pacup.rb && sudo pacman -Suy'
+alias pacup='sudo pacmatic -Syu'
 
 # cd
 alias .='cd ../'
