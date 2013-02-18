@@ -25,6 +25,8 @@ alias la='ls -Ah'
 alias ll='ls -lh'
 alias lr='ls -tRh'
 alias lt='ls -lth'
+alias lal='la -l'
+alias lla='lal'
 
 #--------------------------------------------------------------------------------
 # History
@@ -111,6 +113,10 @@ PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$rese
 #--------------------------------------------------------------------------------
 # Local overrides
 #--------------------------------------------------------------------------------
+
+if [[ -e ~/.zshrc_amazon ]]; then
+    source ~/.zshrc_amazon
+fi
 
 if [[ -e ~/.zshrc_local ]]; then
     source ~/.zshrc_local
