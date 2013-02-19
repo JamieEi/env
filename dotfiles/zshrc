@@ -95,6 +95,23 @@ bindkey '^i' expand-or-complete-prefix
 # eval "$(sed -n 's/^/bindkey /; s/: / /p' /etc/inputrc)"
 
 #--------------------------------------------------------------------------------
+# CK2 
+#--------------------------------------------------------------------------------
+
+export CK2_SAVES=~/Documents/Paradox\ Interactive/Crusader\ Kings\ II/save\ games
+export CK2_DROPBOX=~/Dropbox/games/CrusaderKings2
+
+function ck2-save-latest {
+  LATEST=`ls -t $CK2_SAVES/*.ck2 | head -n 1`
+  cp $LATEST $CK2_DROPBOX
+}
+
+function ck2-load-latest {
+  LATEST=`ls -t $CK2_DROPBOX/*.ck2 | head -n 1`
+  cp $LATEST $CK2_SAVES
+}
+
+#--------------------------------------------------------------------------------
 # Misc 
 #--------------------------------------------------------------------------------
 
