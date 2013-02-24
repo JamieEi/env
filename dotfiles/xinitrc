@@ -25,15 +25,16 @@ fi
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
 DEFAULT_SESSION=awesome
-
 case $1 in
     awesome)
+        xautolock -time 30 -locker slimlock &
         exec awesome
         ;;
     xfce4)
         exec startxfce4
         ;;
     *)
+        xautolock -time 30 -locker slimlock &
         exec $DEFAULT_SESSION
         ;;
 esac
