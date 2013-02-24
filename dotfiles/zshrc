@@ -12,6 +12,7 @@ alias rezsh='source ~/.zshrc'
 alias userls='cat /etc/passwd | cut -d: -f1 | sort'
 alias groupls='cat /etc/group | cut -d: -f1 | sort'
 alias pacup='sudo pacmatic -Syu'
+alias svim='sudo -E vim'
 
 # cd
 alias .='cd ../'

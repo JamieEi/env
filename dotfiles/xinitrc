@@ -24,8 +24,21 @@ fi
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
+DEFAULT_SESSION=awesome
+
+case $1 in
+    awesome)
+        exec awesome
+        ;;
+    xfce4)
+        exec startxfce4
+        ;;
+    *)
+        exec $DEFAULT_SESSION
+        ;;
+esac
+
 # exec gnome-session
 # exec startkde
-#exec startxfce4
 # ...or the Window Manager of your choice
-exec awesome
+#exec awesome

@@ -44,7 +44,7 @@ local configdir = awful.util.getdir("config")
 beautiful.init(configdir .. "/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm" --os.getenv("TERM") or "xterm"
+terminal = "urxvt" --os.getenv("TERM") or "xterm"
 editor = os.getenv("EDITOR") or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
