@@ -21,7 +21,5 @@
     default = tracking
 [branch]
     autosetuprebase = always
-[merge]
-    ff = false
 [receive]
     denyCurrentBranch = warn
