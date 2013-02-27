@@ -61,7 +61,7 @@ URxvt*scrollWithBuffer:     true
 URxvt*scrollTtyKeypress:    true
 
 ! Show an icon
-URxvt.iconFile:    /usr/share/icons/Clarity/scalable/apps/terminal.svg
+!URxvt.iconFile:    /usr/share/icons/Clarity/scalable/apps/terminal.svg
 
 ! Clickable URLs
 URxvt.perl-ext-common:  default,matcher
@@ -75,10 +75,10 @@ URxvt.matcher.button:   1
 Xft.autohint:       0
 Xft.lcdfilter:      lcddefault
 Xft.hintstyle:      hintfull
-Xft.hinting:        true
-Xft.antialias:      true
+Xft.hinting:        1
+Xft.antialias:      1
 Xft.rgba:           rgb
 
 ! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
-urxvt*font:         xft:inconsolata:size=7
+urxvt*font:         xft:inconsolata:size=11
 
