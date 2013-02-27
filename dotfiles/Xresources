@@ -60,14 +60,25 @@ URxvt*scrollTtyOutput:      false
 URxvt*scrollWithBuffer:     true
 URxvt*scrollTtyKeypress:    true
 
-! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
+! Show an icon
+URxvt.iconFile:    /usr/share/icons/Clarity/scalable/apps/terminal.svg
+
+! Clickable URLs
+URxvt.perl-ext-common:  default,matcher
+URxvt.url-launcher:      /usr/bin/chromium
+URxvt.matcher.button:   1
+
+!--------------------------------------------------------------------------------
+! Fonts
+!--------------------------------------------------------------------------------
+
 Xft.autohint:       0
 Xft.lcdfilter:      lcddefault
 Xft.hintstyle:      hintfull
-Xft.hinting:        1
-Xft.antialias:      1
+Xft.hinting:        true
+Xft.antialias:      true
 Xft.rgba:           rgb
 
-! Appearance
-urxvt*font:         xft:inconsolata:size=11
+! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
+urxvt*font:         xft:inconsolata:size=7
 

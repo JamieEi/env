@@ -1,4 +1,4 @@
-alias ck2='optirun ~/.local/share/Steam/SteamApps/common/Crusader\ Kings\ II/ck2'
+alias ck2='~/.local/share/Steam/SteamApps/common/Crusader\ Kings\ II/ck2'
 alias matchmaker='java -jar ~/opt/misc/matchmaker.jar'
 
 function licr { xhost +local: && su lim -lc 'export DISPLAY=":0.0" && chromium' }
