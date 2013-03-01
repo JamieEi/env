@@ -1,0 +1,87 @@
+!--------------------------------------------------------------------------------
+! Terminal colors
+!--------------------------------------------------------------------------------
+
+! tangoesque scheme
+*background: #111111
+*foreground: #babdb6
+! Black (not tango) + DarkGrey
+*color0:  #000000
+*color8:  #555753
+! DarkRed + Red
+*color1:  #ff6565
+*color9:  #ff8d8d
+! DarkGreen + Green
+*color2:  #93d44f
+*color10: #c8e7a8
+! DarkYellow + Yellow
+*color3:  #eab93d
+*color11: #ffc123
+! DarkBlue + Blue
+*color4:  #204a87
+*color12: #3465a4
+! DarkMagenta + Magenta
+*color5:  #ce5c00
+*color13: #f57900
+!DarkCyan + Cyan (both not tango)
+*color6:  #89b6e2
+*color14: #46a4ff
+! LightGrey + White
+*color7:  #cccccc
+*color15: #ffffff
+
+!--------------------------------------------------------------------------------
+! Colored man pages
+!--------------------------------------------------------------------------------
+
+*VT100.colorBDMode:     true
+*VT100.colorBD:         red
+*VT100.colorULMode:     true
+*VT100.colorUL:         cyan
+*VT100.veryBoldColors:  6
+
+URxvt.colorIT:      !87af5f
+URxvt.colorBD:      !d7d7d7
+URxvt.colorUL:      !87afd7
+
+!--------------------------------------------------------------------------------
+! xterm
+!--------------------------------------------------------------------------------
+
+xterm*borderWidth:      0
+xterm*scrollBar:        off
+
+!--------------------------------------------------------------------------------
+! rxvt-Unicode
+!--------------------------------------------------------------------------------
+
+URxvt.scrollBar:            false
+URxvt*scrollTtyOutput:      false
+URxvt*scrollWithBuffer:     true
+URxvt*scrollTtyKeypress:    true
+
+! Show an icon
+!URxvt.iconFile:    /usr/share/icons/Clarity/scalable/apps/terminal.svg
+
+! Clickable URLs
+URxvt.perl-ext-common:  default,matcher
+URxvt.url-launcher:      /usr/bin/chromium
+URxvt.matcher.button:   1
+
+!--------------------------------------------------------------------------------
+! Fonts
+!--------------------------------------------------------------------------------
+
+Xft.autohint:       0
+Xft.lcdfilter:      lcddefault
+Xft.hintstyle:      hintfull
+Xft.hinting:        1
+Xft.antialias:      1
+Xft.rgba:           rgb
+
+! https://bbs.archlinux.org/viewtopic.php?pid=1237933#p1237933
+! Xft.dpi:          168
+
+! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
+urxvt*font:         xft:inconsolata:size=11
+

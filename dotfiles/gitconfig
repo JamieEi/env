@@ -1,0 +1,25 @@
+[alias]
+    st = status
+    co = checkout
+    ci = commit -a
+    files = show --oneline
+    graph = log --graph --decorate --all
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    sync = pull --rebase
+    unadd = reset --
+    unedit = checkout --
+    unstage = reset HEAD
+    unrm = checkout --
+    unstash = stash pop
+[color]
+    ui = auto
+    diff = auto
+    status = auto
+    branch = auto
+[push]
+    default = tracking
+[branch]
+    autosetuprebase = always
+[receive]
+    denyCurrentBranch = warn
