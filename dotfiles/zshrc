@@ -143,6 +143,14 @@ if [[ -e ~/.zshrc_local ]]; then
     source ~/.zshrc_local
 fi
 
+if [[ -e ~/.zshrc_private ]]; then
+    source ~/.zshrc_private
+fi
+
+if [[ -e ~/.zshrc_home ]]; then
+    source ~/.zshrc_home
+fi
+
 #--------------------------------------------------------------------------------
 # Path
 #--------------------------------------------------------------------------------

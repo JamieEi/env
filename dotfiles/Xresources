@@ -79,6 +79,9 @@ Xft.hinting:        1
 Xft.antialias:      1
 Xft.rgba:           rgb
 
+! https://bbs.archlinux.org/viewtopic.php?pid=1237933#p1237933
+! Xft.dpi:          168
+
 ! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
 urxvt*font:         xft:inconsolata:size=11
 
