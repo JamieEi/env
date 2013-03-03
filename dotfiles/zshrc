@@ -119,7 +119,6 @@ function ck2-load-latest {
 export EDITOR="vim"
 export LESS="-r"
 export PAGER="less"
-export TERM="xterm"
 
 # Extended globbing: http://zsh.sourceforge.net/Intro/intro_2.html
 setopt extendedglob
