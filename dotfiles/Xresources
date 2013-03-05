@@ -68,6 +68,16 @@ URxvt.perl-ext-common:  default,matcher
 URxvt.url-launcher:      /usr/bin/chromium
 URxvt.matcher.button:   1
 
+! Disable crazy picture mode
+URxvt.iso14755:        false
+URxvt.iso14755_52:     false
+
+!URxvt.keysym.C-S-c:    perl:clipboard:copy
+!URxvt.keysym.C-S-v:    perl:clipboard:paste
+
+! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
+urxvt*font:         xft:inconsolata:size=11
+
 !--------------------------------------------------------------------------------
 ! Fonts
 !--------------------------------------------------------------------------------
@@ -81,7 +91,3 @@ Xft.rgba:           rgb
 
 ! https://bbs.archlinux.org/viewtopic.php?pid=1237933#p1237933
 ! Xft.dpi:          168
-
-! urxvt ignores fontconfig, https://wiki.archlinux.org/index.php/Font_Configuration#Applications_without_fontconfig_support
-urxvt*font:         xft:inconsolata:size=11
-
