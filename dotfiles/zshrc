@@ -116,6 +116,7 @@ function ck2-load-latest {
 # Misc 
 #--------------------------------------------------------------------------------
 
+export BROWSER="chromium"
 export EDITOR="vim"
 export LESS="-r"
 export PAGER="less"
@@ -165,6 +166,7 @@ fi
 #--------------------------------------------------------------------------------
 
 # Add to path
+path+=~/bin
 path+=~/scripts
 
 # Remove any entries that don't exist
@@ -177,3 +179,5 @@ path=($^path(N))
 
 # Start @ home
 cd
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
