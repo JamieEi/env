@@ -12,6 +12,7 @@
     unstage = reset HEAD
     unrm = checkout --
     unstash = stash pop
+	dag = log --graph --decorate --all
 [color]
     ui = auto
     diff = auto
