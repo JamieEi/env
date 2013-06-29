@@ -1,0 +1,11 @@
+# ln -s ~/env/dotfiles/home/ssh_config ~/.ssh/config
+
+Host obi
+    HostName 192.168.1.124
+
+Host luna
+    HostName 192.168.1.35
+
+Host roku
+    HostName 192.168.1.185
+
