@@ -81,7 +81,6 @@ vmap Q gq
 nmap Q gqap
 
 " Search
-set ignorecase
 set smartcase
 set hlsearch
 set incsearch
