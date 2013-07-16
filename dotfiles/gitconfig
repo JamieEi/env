@@ -18,8 +18,10 @@
     diff = auto
     status = auto
     branch = auto
+[core]
+	pager = less -FMRiX
 [push]
-    default = tracking
+	default = simple
 [branch]
     autosetuprebase = always
 [receive]
