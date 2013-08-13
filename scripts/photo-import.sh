@@ -7,14 +7,21 @@ DEFAULT_DEST=~/workflow
 . shflags
 
 # Configure shflags
-DEFINE_string 'foo' 'bar' 'Some option' 'f'
+DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
 # Parse flags & options
 FLAGS_HELP="USAGE: $0 [flags] [source] [destination]"
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
 
+if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
+    SIMULATE=true
+else
+    SIMULATE=false
+fi
+
 # Parse positional arguments
+echo Parsing positional arguments... >&2
 if [ $# -eq 0 ]; then
     SRC=$DEFAULT_SRC
     DEST=$DEFAULT_DEST
@@ -30,17 +37,21 @@ else
     exit 1
 fi
 
-echo "SRC: $SRC" >&2
-echo "DEST: $DEST" >&2
+echo source = $SRC >&2
+echo destination = $DEST >&2
+echo simulate = $SIMULATE >&2
 
 SEQ=0
 LASTBASE=
+LASTDIR=
 
+echo Processing files... >&2
 for FILE in $(find $SRC -type f -regex '.*\(JPG\|RAF\)')
 do
     # Get the file data
     EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
     BASE=$(basename $(basename $FILE .JPG) .RAF)
+    echo $FILE -\> EXIF=$EXIF, BASE=$BASE >&2
     
     # Print "CREATE_DATE CREATE_TIME BASE FILE"
     echo "$EXIF $BASE $FILE"
@@ -57,6 +68,13 @@ do
         mkdir -pv $DEST_DIR
     fi
 
+    # Reset the sequence # for each destination directory
+    if [ "$DEST_DIR" != "$LASTDIR" ]; then
+        SEQ=0
+        LASTBASE=
+    fi
+    LASTDIR=$DEST_DIR
+
     # Increment the sequence number
     if [ "$BASE" != "$LASTBASE" ]; then
         SEQ=$((SEQ+1))
@@ -69,6 +87,11 @@ do
     DEST_PATH=$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
 
     # Copy the file
-    echo "cp -nv $SRC_PATH $DEST_PATH"
+    if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
+        echo cp -nv $SRC_PATH $DEST_PATH
+    else
+        #cp -nv $SRC_PATH $DEST_PATH
+        echo oops
+    fi
 done
 
