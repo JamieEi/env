@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Requires exiftool, see http://www.sno.phy.queensu.ca/~phil/exiftool/install.html#Unix
+
 DEFAULT_SRC=/media
 DEFAULT_DEST=~/workflow
 
@@ -14,11 +16,14 @@ FLAGS_HELP="USAGE: $0 [flags] [source] [destination]"
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
 
-if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
-    SIMULATE=true
-else
-    SIMULATE=false
-fi
+# Evals or simulates a string based on the --simualte flag
+function evalOrSimulate {
+    if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
+        echo $1 >&2
+    else
+        eval $1 >&2
+    fi
+}
 
 # Parse positional arguments
 echo Parsing positional arguments... >&2
@@ -39,7 +44,6 @@ fi
 
 echo source = $SRC >&2
 echo destination = $DEST >&2
-echo simulate = $SIMULATE >&2
 
 SEQ=0
 LASTBASE=
@@ -52,6 +56,17 @@ do
     EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
     BASE=$(basename $(basename $FILE .JPG) .RAF)
     echo $FILE -\> EXIF=$EXIF, BASE=$BASE >&2
+
+    # Validate
+    if [ $(echo $EXIF | wc -w) -ne 2 ]; then
+        echo "Missing EXIF data, skipping" >&2
+        continue
+    fi
+
+    if [ $(echo $BASE| wc -w) -ne 1 ]; then
+        echo "Error extracting BASE, skipping" >&2
+        continue
+    fi
     
     # Print "CREATE_DATE CREATE_TIME BASE FILE"
     echo "$EXIF $BASE $FILE"
@@ -65,7 +80,7 @@ do
     # Create the destination directory
     DEST_DIR=$DEST/$CREATE_DATE
     if [ ! -d "$DEST_DIR" ]; then
-        mkdir -pv $DEST_DIR
+        evalOrSimulate "mkdir -pv $DEST_DIR"
     fi
 
     # Reset the sequence # for each destination directory
@@ -87,11 +102,6 @@ do
     DEST_PATH=$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
 
     # Copy the file
-    if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
-        echo cp -nv $SRC_PATH $DEST_PATH
-    else
-        #cp -nv $SRC_PATH $DEST_PATH
-        echo oops
-    fi
+    evalOrSimulate "cp -nv $SRC_PATH $DEST_PATH"
 done
 
