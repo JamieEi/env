@@ -172,7 +172,7 @@ fi
 #--------------------------------------------------------------------------------
 
 # Add to path
-path+=~/bin
+PATH=~/bin:$PATH
 path+=~/scripts
 
 # Remove any entries that don't exist

@@ -3,6 +3,7 @@ export LUNA='192.168.1.35'
 export JAVA_HOME='/usr/lib/jvm/java-7-openjdk-amd64'
 export GLACIER_CLI="/home/jamie/glacier-cli/target/glacier-1.1-SNAPSHOT-jar-with-dependencies.jar"
 
+alias civ5='env WINEPREFIX="/home/jamie/.local/share/wineprefixes/civ5_demo_steam" optirun -b primus wine C:\\windows\\command\\start.exe /Unix /home/jamie/.local/share/wineprefixes/civ5_demo_steam/dosdevices/c:/users/Public/Desktop/Steam.lnk'
 alias ck2='~/.local/share/Steam/SteamApps/common/Crusader\ Kings\ II/ck2'
 alias matchmaker='java -jar ~/opt/misc/matchmaker.jar'
 
