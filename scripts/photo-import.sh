@@ -1,6 +1,37 @@
 #!/bin/bash
 
-SRC=Pictures/staging/130623 #~/Pictures/shower
+DEFAULT_SRC=/media
+DEFAULT_DEST=~/workflow
+
+# Source shflags (https://code.google.com/p/shflags/wiki/Documentation10x)
+. shflags
+
+# Configure shflags
+DEFINE_string 'foo' 'bar' 'Some option' 'f'
+
+# Parse flags & options
+FLAGS_HELP="USAGE: $0 [flags] [source] [destination]"
+FLAGS "$@" || exit $?
+eval set -- "${FLAGS_ARGV}"
+
+# Parse positional arguments
+if [ $# -eq 0 ]; then
+    SRC=$DEFAULT_SRC
+    DEST=$DEFAULT_DEST
+elif [ $# -eq 1 ]; then
+    SRC=$1
+    DEST=$DEFAULT_DEST
+elif [ $# -eq 2 ]; then
+    SRC=$1
+    DEST=$2
+else
+    echo "error: too many arguments ($#)" >&2
+    flags_help
+    exit 1
+fi
+
+echo "SRC: $SRC" >&2
+echo "DEST: $DEST" >&2
 
 SEQ=0
 LASTBASE=
@@ -18,12 +49,12 @@ do
     # Parse the sorted line
     CREATE_DATE=$(echo $LINE | cut -d ' ' -f 1)
     BASE=$(echo $LINE | cut -d ' ' -f 3)
-    SRC=$(echo $LINE | cut -d ' ' -f 4)
+    SRC_PATH=$(echo $LINE | cut -d ' ' -f 4)
 
     # Create the destination directory
-    DIR=~/workflow/$CREATE_DATE
-    if [ ! -d "$DIR" ]; then
-        mkdir -pv $DIR
+    DEST_DIR=$DEST/$CREATE_DATE
+    if [ ! -d "$DEST_DIR" ]; then
+        mkdir -pv $DEST_DIR
     fi
 
     # Increment the sequence number
@@ -33,10 +64,11 @@ do
     fi
 
     # Compute the destination path
-    FILE=$(basename $SRC)
-    EXT=${FILE##$BASE}
-    DEST=$DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
+    SRC_FILE=$(basename $SRC_PATH)
+    EXT=${SRC_FILE##$BASE}
+    DEST_PATH=$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
 
     # Copy the file
-    echo "cp -v $SRC $DEST"
+    echo "cp -nv $SRC_PATH $DEST_PATH"
 done
+
