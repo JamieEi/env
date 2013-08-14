@@ -3,7 +3,7 @@
 # Requires exiftool, see http://www.sno.phy.queensu.ca/~phil/exiftool/install.html#Unix
 
 DEFAULT_SRC=/media
-DEFAULT_DEST=~/workflow
+DEFAULT_DEST=~/photos
 
 # Source shflags (https://code.google.com/p/shflags/wiki/Documentation10x)
 . shflags
@@ -16,7 +16,7 @@ FLAGS_HELP="USAGE: $0 [flags] [source] [destination]"
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
 
-# Evals or simulates a string based on the --simualte flag
+# Evals or simulates a string based on the --simulate flag
 function evalOrSimulate {
     if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
         echo $1 >&2
