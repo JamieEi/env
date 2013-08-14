@@ -1,9 +1,13 @@
 #!/bin/bash
 
-# Requires exiftool, see http://www.sno.phy.queensu.ca/~phil/exiftool/install.html#Unix
-
 DEFAULT_SRC=/media
 DEFAULT_DEST=~/photos
+
+# Make sure exiftool is installed in path
+if [ ! $(which exiftool) ]; then
+    echo "Requires exiftool, see http://www.sno.phy.queensu.ca/~phil/exiftool/install.html#Unix" >&2
+    exit 1
+fi
 
 # Source shflags (https://code.google.com/p/shflags/wiki/Documentation10x)
 . shflags
