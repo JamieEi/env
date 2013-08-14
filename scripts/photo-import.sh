@@ -52,10 +52,21 @@ echo destination = $DEST >&2
 SEQ=0
 LASTBASE=
 LASTDIR=
+declare -A HASHES
 
 echo Processing files... >&2
 for FILE in $(find $SRC -type f -regex '.*\(JPG\|RAF\)')
 do
+    # Check for a duplicate
+    HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
+    if [ ${HASHES[$HASH]} ]; then
+        echo "Skipping duplicate file $FILE" >&2
+        continue
+    fi
+
+    # Save the hash
+    declare -A HASHES=( [$HASH]=$FILE )
+
     # Get the file data
     EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
     BASE=$(basename $(basename $FILE .JPG) .RAF)
