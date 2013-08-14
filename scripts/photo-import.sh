@@ -54,9 +54,14 @@ LASTBASE=
 LASTDIR=
 declare -A HASHES
 
+N_FILES=0
+N_COPIED=0
+
 echo Processing files... >&2
 for FILE in $(find $SRC -type f -regex '.*\(JPG\|RAF\)')
 do
+    $((N_FILES++))
+
     # Check for a duplicate
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
     if [ ${HASHES[$HASH]} ]; then
@@ -118,5 +123,10 @@ do
 
     # Copy the file
     evalOrSimulate "cp -nv $SRC_PATH $DEST_PATH"
+    N_COPIED=$((N_COPIED+1))
 done
+
+echo "# files = $N_FILES" >&2
+echo "# copied = $N_COPIED" >&2
+echo "# skipped = $((N_FILES-N_COPIED))" >&2
 
