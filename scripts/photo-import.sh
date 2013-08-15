@@ -65,33 +65,38 @@ do
     # Get the file data
     EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
     BASE=$(basename $(basename $FILE .JPG) .RAF)
-    echo $FILE -\> EXIF=$EXIF, BASE=$BASE >&2
 
     # Validate
     VALID=true
+    STATUS="ok"
 
     if [[ $(echo $EXIF | wc -w) -ne 2 ]]; then
-        echo "Missing EXIF data, skipping" >&2
         VALID=false
+        STATUS="missing EXIF data"
     fi
 
     if [[ $VALID && $(echo $BASE | wc -w) -ne 1 ]]; then
-        echo "Error extracting BASE, skipping" >&2
         VALID=false
+        STATUS="error extracting BASE"
     fi
     
     # Check for duplicates
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
     if [[ $VALID && ${HASHES[$HASH]} ]]; then
-        echo "Skipping duplicate file $FILE" >&2
         VALID=false
+        STATUS="duplicate"
     fi
 
     # Save the hash
-    declare -A HASHES=( [$HASH]=$FILE )
+    if [[ $VALID ]]; then
+        declare -A HASHES=( [$HASH]=$FILE )
+    fi
 
     # Print file data to pipe. Note that EXIF has multiple fields.
     echo "$N_FILES $EXIF $BASE $FILE $VALID"
+
+    # Log progress
+    echo "$FILE -> $STATUS" >&2
 done | sort | while read LINE
 do
     # Parse the sorted line
