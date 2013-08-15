@@ -78,6 +78,9 @@ do
         VALID=false
         STATUS="error extracting BASE"
     fi
+
+    # TODO: Compute destination directory
+    # TODO: Add file hashes
     
     # Check for duplicates
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
@@ -121,7 +124,6 @@ do
             if [ -d "$DEST_DIR" ]; then
                 FOO=1
                 # TODO: Set SEQ to max value
-                # TODO: Add file hashes
             else
                 evalOrSimulate "mkdir -pv $DEST_DIR"
             fi
