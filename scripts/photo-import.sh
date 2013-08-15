@@ -30,7 +30,6 @@ function evalOrSimulate {
 }
 
 # Parse positional arguments
-echo Parsing positional arguments... >&2
 if [ $# -eq 0 ]; then
     SRC=$DEFAULT_SRC
     DEST=$DEFAULT_DEST
@@ -57,7 +56,7 @@ declare -A HASHES
 N_FILES=0
 N_COPIED=0
 
-echo Processing files... >&2
+echo -e "\nProcessing files..." >&2
 for FILE in $(find $SRC -type f -regex '.*\(JPG\|RAF\)')
 do
     N_FILES=$((N_FILES+1))
@@ -107,20 +106,25 @@ do
     VALID=$(echo $LINE | cut -d ' ' -f 6)
 
     if [[ $N_FILES == "1" ]]; then
-        echo Copying files... >&2
+        echo -e "\nCopying files..." >&2
     fi
 
     if [[ $VALID  == "true" ]]; then
-        # Create the destination directory
-        DEST_DIR=$DEST/$CREATE_DATE
-        if [ ! -d "$DEST_DIR" ]; then
-            evalOrSimulate "mkdir -pv $DEST_DIR"
-        fi
-
         # Reset the sequence # for each destination directory
+        DEST_DIR=$DEST/$CREATE_DATE
         if [ "$DEST_DIR" != "$LASTDIR" ]; then
+            # Reset the sequence #
             SEQ=0
             LASTBASE=
+
+            # Process or create the destination directory
+            if [ -d "$DEST_DIR" ]; then
+                FOO=1
+                # TODO: Set SEQ to max value
+                # TODO: Add file hashes
+            else
+                evalOrSimulate "mkdir -pv $DEST_DIR"
+            fi
         fi
         LASTDIR=$DEST_DIR
 
@@ -141,9 +145,10 @@ do
     fi
 
     # Print stats to escape them from the pipe subshell
+    echo -e "\nStatistics..."
     echo "# files = $N_FILES"
     echo "# copied = $N_COPIED"
     echo "# skipped = $((N_FILES-N_COPIED))"
-done | tail -n 3 >&2
+done | tail -n 5 >&2
 
 
