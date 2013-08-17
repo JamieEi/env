@@ -1,24 +1,8 @@
-#!/bin/bash
+#!/usr/bin/zsh --sh-word-split
 
-DEFAULT_SRC=/media
-DEFAULT_DEST=~/photos
-
-# Make sure exiftool is installed in path
-if [ ! $(which exiftool) ]; then
-    echo "Requires exiftool, see http://www.sno.phy.queensu.ca/~phil/exiftool/install.html#Unix" >&2
-    exit 1
-fi
-
-# Source shflags (https://code.google.com/p/shflags/wiki/Documentation10x)
-. shflags
-
-# Configure shflags
-DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
-
-# Parse flags & options
-FLAGS_HELP="USAGE: $0 [flags] [source] [destination]"
-FLAGS "$@" || exit $?
-eval set -- "${FLAGS_ARGV}"
+####################################################################################################
+# Helper functions
+####################################################################################################
 
 # Evals or simulates a string based on the --simulate flag
 function evalOrSimulate {
@@ -28,6 +12,45 @@ function evalOrSimulate {
         eval $1 >&2
     fi
 }
+
+function error {
+    echo "error: $1" >&2
+    exit 1
+}
+
+declare -A DEST_FILE_HASHES
+
+function addHash {
+    HASH=$(sha1sum $1 | cut -f 1 -d ' ')
+    DEST_FILE_HASHES[$HASH]=$FILE
+}
+
+####################################################################################################
+# Requirements
+####################################################################################################
+
+if [ ! $(which exiftool) ]; then
+    error "requires exiftool, see http://www.sno.phy.queensu.ca/~phil/exiftool/install.html#Unix"
+fi
+
+####################################################################################################
+# Argument parsing
+####################################################################################################
+
+DEFAULT_SRC=/media
+DEFAULT_DEST=~/photos
+
+# Source shflags (https://code.google.com/p/shflags/wiki/Documentation10x)
+FLAGS_PARENT=$0
+. shflags
+
+# Configure shflags
+DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
+
+# Parse flags & options
+FLAGS_HELP="USAGE: $0 [flags] [source] [destination]"
+FLAGS "$@" || exit $?
+eval set -- "${FLAGS_ARGV}"
 
 # Parse positional arguments
 if [ $# -eq 0 ]; then
@@ -48,73 +71,102 @@ fi
 echo source = $SRC >&2
 echo destination = $DEST >&2
 
+if [[ ! -d "$SRC" ]]; then
+    error "source does not exist"
+fi
+
+####################################################################################################
+# Get file data
+####################################################################################################
+
+# Get the file list
+FILES=($SRC/*.(JPG|RAF))
+echo "found $#FILES files" >&2
+
+# Declare associative arrays
+declare -A FILE_CREATE_DATE
+declare -A FILE_CREATE_TIME
+declare -A FILE_BASES
+declare -A FILE_DEST_DIRS
+declare -A SORT_KEY_FILES
+declare -A SORT_KEY_HASHES
+declare -A DEST_DIRS
+
+# Get file data
+for FILE in $FILES
+do
+    EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
+    CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 1)
+    CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
+    BASE=$(basename $(basename $FILE .JPG) .RAF)
+    SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE"
+    HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
+    DEST_DIR=$DEST/$CREATE_DATE
+
+    FILE_CREATE_DATE[$FILE]=$CREATE_DATE
+    FILE_CREATE_TIME[$FILE]=$CREATE_TIME
+    FILE_BASES[$FILE]=$BASE
+    FILE_DEST_DIRS[$FILE]=$DEST_DIR
+    SORT_KEY_FILES[$SORT_KEY]=$FILE
+    SORT_KEY_HASHES[$SORT_KEY]=$HASH
+    DEST_DIRS[$DEST_DIR]=true
+done
+
+####################################################################################################
+# Process dest file contents
+####################################################################################################
+
+echo -e "\nscanning $#DEST_DIRS destination directories..." >&2
+
+# TODO: Set starting SEQ
+
+for DEST_DIR in ${(k)DEST_DIRS}
+do
+    DEST_FILES=($DEST_DIR/*.(JPG|RAF))
+    for FILE in $DEST_FILES
+    do
+        addHash $FILE
+    done
+    echo "$DEST_DIR: $#DEST_FILES files" >&2
+done
+
+echo "# hashes = $#DEST_FILE_HASHES"
+
+####################################################################################################
+# Copy files
+####################################################################################################
+
+echo -e "\ncopying files..." >&2
+
 SEQ=0
 LASTBASE=
 LASTDIR=
-declare -A HASHES
-
-N_FILES=0
 N_COPIED=0
 
-echo -e "\nProcessing files..." >&2
-for FILE in $(find $SRC -type f -regex '.*\(JPG\|RAF\)')
-do
-    N_FILES=$((N_FILES+1))
+# Sort the sort keys
+SORT_KEYS_ASC=${(ko@)SORT_KEY_HASHES}
 
-    # Get the file data
-    EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
-    BASE=$(basename $(basename $FILE .JPG) .RAF)
+# Iterate over the sort keys / files
+for SORT_KEY in $SORT_KEYS_ASC
+do
+    HASH=$SORT_KEY_HASHES[$SORT_KEY]
+    FILE=$SORT_KEY_FILES[$SORT_KEY]
+    DEST_DIR=$FILE_DEST_DIRS[$FILE]
+    CREATE_DATE=$FILE_CREATE_DATE[$FILE]
+    BASE=$FILE_BASES[$FILE]
 
     # Validate
-    VALID=true
-    STATUS="ok"
-
-    if [[ $(echo $EXIF | wc -w) -ne 2 ]]; then
-        VALID=false
-        STATUS="missing EXIF data"
-    fi
-
-    if [[ $VALID && $(echo $BASE | wc -w) -ne 1 ]]; then
-        VALID=false
-        STATUS="error extracting BASE"
-    fi
-
-    # TODO: Compute destination directory
-    # TODO: Add file hashes
-    
-    # Check for duplicates
-    HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
-    if [[ $VALID && ${HASHES[$HASH]} ]]; then
-        VALID=false
+    if [[ $SORT_KEY == "xxx" ]]; then
+        STATUS="invalid sort key ($SORT_KEY)"
+    elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
         STATUS="duplicate"
+    else
+        STATUS="ok"
     fi
 
-    # Save the hash
-    if [[ $VALID ]]; then
-        declare -A HASHES=( [$HASH]=$FILE )
-    fi
-
-    # Print file data to pipe. Note that EXIF has multiple fields.
-    echo "$N_FILES $EXIF $BASE $FILE $VALID"
-
-    # Log progress
-    echo "$FILE -> $STATUS" >&2
-done | sort | while read LINE
-do
-    # Parse the sorted line
-    N_FILES=$(echo $LINE | cut -d ' ' -f 1)
-    CREATE_DATE=$(echo $LINE | cut -d ' ' -f 2)
-    BASE=$(echo $LINE | cut -d ' ' -f 4)
-    SRC_PATH=$(echo $LINE | cut -d ' ' -f 5)
-    VALID=$(echo $LINE | cut -d ' ' -f 6)
-
-    if [[ $N_FILES == "1" ]]; then
-        echo -e "\nCopying files..." >&2
-    fi
-
-    if [[ $VALID  == "true" ]]; then
+    # If everthing is ok process the file
+    if [[ $STATUS == "ok" ]]; then
         # Reset the sequence # for each destination directory
-        DEST_DIR=$DEST/$CREATE_DATE
         if [ "$DEST_DIR" != "$LASTDIR" ]; then
             # Reset the sequence #
             SEQ=0
@@ -137,20 +189,22 @@ do
         fi
 
         # Compute the destination path
-        SRC_FILE=$(basename $SRC_PATH)
-        EXT=${SRC_FILE##$BASE}
+        FILENAME=$(basename $FILE)
+        EXT=${FILENAME##$BASE}
         DEST_PATH=$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
 
         # Copy the file
-        evalOrSimulate "cp -nv $SRC_PATH $DEST_PATH"
+        evalOrSimulate "cp -nv $FILE $DEST_PATH"
         N_COPIED=$((N_COPIED+1))
+    else
+        echo "$FILE -> $STATUS" >&2
     fi
-
-    # Print stats to escape them from the pipe subshell
-    echo -e "\nStatistics..."
-    echo "# files = $N_FILES"
-    echo "# copied = $N_COPIED"
-    echo "# skipped = $((N_FILES-N_COPIED))"
 done | tail -n 5 >&2
 
+# Print stats to escape them from the pipe subshell
+echo -e "\nstatistics..."
+N_FILES=$#SORT_KEY_FILES
+echo "# files = $N_FILES"
+echo "# copied = $N_COPIED"
+echo "# skipped = $((N_FILES-N_COPIED))"
 
