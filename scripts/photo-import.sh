@@ -18,13 +18,6 @@ function error {
     exit 1
 }
 
-declare -A DEST_FILE_HASHES
-
-function addHash {
-    HASH=$(sha1sum $1 | cut -f 1 -d ' ')
-    DEST_FILE_HASHES[$HASH]=$FILE
-}
-
 ####################################################################################################
 # Requirements
 ####################################################################################################
@@ -118,16 +111,32 @@ done
 
 echo -e "\nscanning $#DEST_DIRS destination directories..." >&2
 
-# TODO: Set starting SEQ
+declare -A DEST_FILE_HASHES
+declare -A DEST_DIR_MAXSEQ
 
 for DEST_DIR in ${(k)DEST_DIRS}
 do
     DEST_FILES=($DEST_DIR/*.(JPG|RAF))
+    MAXSEQ=0
+
     for FILE in $DEST_FILES
     do
-        addHash $FILE
+        HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
+        DEST_FILE_HASHES[$HASH]=$FILE
+
+        FILENAME=$(basename $FILE)
+
+        # Get the sequence number from a filename like 130825_0001.JPG
+        SEQSTR=${${FILENAME##*_}%%.(JPG|RAF)}
+        SEQ=`expr 0 + $SEQSTR`
+
+        if [[ $SEQ -gt $MAXSEQ ]]; then
+            MAXSEQ=$SEQ
+        fi
     done
-    echo "$DEST_DIR: $#DEST_FILES files" >&2
+
+    DEST_DIR_MAXSEQ[$DEST_DIR]=$MAXSEQ
+    echo "$DEST_DIR: $#DEST_FILES files, max seq = $MAXSEQ" >&2
 done
 
 echo "# hashes = $#DEST_FILE_HASHES"
@@ -138,15 +147,11 @@ echo "# hashes = $#DEST_FILE_HASHES"
 
 echo -e "\ncopying files..." >&2
 
-SEQ=0
-LASTBASE=
-LASTDIR=
-N_COPIED=0
-
 # Sort the sort keys
 SORT_KEYS_ASC=${(ko@)SORT_KEY_HASHES}
 
 # Iterate over the sort keys / files
+N_COPIED=0
 for SORT_KEY in $SORT_KEYS_ASC
 do
     HASH=$SORT_KEY_HASHES[$SORT_KEY]
@@ -156,6 +161,7 @@ do
     BASE=$FILE_BASES[$FILE]
 
     # Validate
+    # TODO: Match sort key against regex
     if [[ $SORT_KEY == "xxx" ]]; then
         STATUS="invalid sort key ($SORT_KEY)"
     elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
@@ -166,17 +172,14 @@ do
 
     # If everthing is ok process the file
     if [[ $STATUS == "ok" ]]; then
-        # Reset the sequence # for each destination directory
+        # Handle new directories
         if [ "$DEST_DIR" != "$LASTDIR" ]; then
             # Reset the sequence #
-            SEQ=0
+            SEQ=${DEST_DIR_MAXSEQ[$DEST_DIR]:-0}
             LASTBASE=
 
-            # Process or create the destination directory
-            if [ -d "$DEST_DIR" ]; then
-                FOO=1
-                # TODO: Set SEQ to max value
-            else
+            # Create the destination directory
+            if [ ! -d "$DEST_DIR" ]; then
                 evalOrSimulate "mkdir -pv $DEST_DIR"
             fi
         fi
@@ -199,9 +202,9 @@ do
     else
         echo "$FILE -> $STATUS" >&2
     fi
-done | tail -n 5 >&2
+done
 
-# Print stats to escape them from the pipe subshell
+# Print stats
 echo -e "\nstatistics..."
 N_FILES=$#SORT_KEY_FILES
 echo "# files = $N_FILES"
