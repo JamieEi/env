@@ -1,5 +1,9 @@
 #!/usr/bin/zsh --sh-word-split
 
+DEFAULT_SRC=/media
+DEFAULT_DEST=~/photos
+EXT_PATTERN="JPG|RAF|jpg|raf"
+
 ####################################################################################################
 # Helper functions
 ####################################################################################################
@@ -29,9 +33,6 @@ fi
 ####################################################################################################
 # Argument parsing
 ####################################################################################################
-
-DEFAULT_SRC=/media
-DEFAULT_DEST=~/photos
 
 # Source shflags (https://code.google.com/p/shflags/wiki/Documentation10x)
 FLAGS_PARENT=$0
@@ -73,13 +74,14 @@ fi
 ####################################################################################################
 
 # Get the file list
-FILES=($SRC/*.(JPG|RAF))
+FILES=($SRC/**/*.(JPG|RAF))
 echo "found $#FILES files" >&2
 
 # Declare associative arrays
 declare -A FILE_CREATE_DATE
 declare -A FILE_CREATE_TIME
 declare -A FILE_BASES
+declare -A FILE_EXTS
 declare -A FILE_DEST_DIRS
 declare -A SORT_KEY_FILES
 declare -A SORT_KEY_HASHES
@@ -91,14 +93,17 @@ do
     EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
     CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 1)
     CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
-    BASE=$(basename $(basename $FILE .JPG) .RAF)
-    SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE"
+    FILENAME=$(basename $FILE)
+    BASE=${FILENAME%%.(JPG|RAF)}
+    EXT=${FILENAME##$BASE}
+    SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
     DEST_DIR=$DEST/$CREATE_DATE
 
     FILE_CREATE_DATE[$FILE]=$CREATE_DATE
     FILE_CREATE_TIME[$FILE]=$CREATE_TIME
     FILE_BASES[$FILE]=$BASE
+    FILE_EXTS[$FILE]=$EXT
     FILE_DEST_DIRS[$FILE]=$DEST_DIR
     SORT_KEY_FILES[$SORT_KEY]=$FILE
     SORT_KEY_HASHES[$SORT_KEY]=$HASH
@@ -159,6 +164,7 @@ do
     DEST_DIR=$FILE_DEST_DIRS[$FILE]
     CREATE_DATE=$FILE_CREATE_DATE[$FILE]
     BASE=$FILE_BASES[$FILE]
+    EXT=$FILE_EXTS[$FILE]
 
     # Validate
     if [[ ! "$SORT_KEY" =~ "^[0-9]{6}-[0-9]{6}-[A-Za-z0-9]+" ]]; then
@@ -192,7 +198,6 @@ do
 
         # Compute the destination path
         FILENAME=$(basename $FILE)
-        EXT=${FILENAME##$BASE}
         DEST_PATH=$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
 
         # Copy the file
