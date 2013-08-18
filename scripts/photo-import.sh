@@ -13,7 +13,7 @@ EXT_PATTERN="JPG|RAF|jpg|raf"
 # Evals or simulates a string based on the --simulate flag
 function evalOrSimulate {
     if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
-        log $1
+        log "$1"
     else
         eval $1 >&2
     fi
@@ -45,6 +45,7 @@ FLAGS_PARENT=$0
 . shflags
 
 # Configure shflags
+# TODO: debug flag: more detail, implies simulate
 DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
 # Parse flags & options
@@ -102,7 +103,7 @@ do
     FILENAME=$(basename $FILE)
     BASE=${FILENAME%%.(JPG|RAF|jpg|raf)}
     EXT=${FILENAME##$BASE.}
-    SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
+    SORT_KEY="$CREATE_DATE:$CREATE_TIME:$BASE:$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
     DEST_DIR=$DEST/$CREATE_DATE
 
@@ -128,27 +129,31 @@ declare -A DEST_DIR_MAXSEQ
 
 for DEST_DIR in ${(k)DEST_DIRS}
 do
-    DEST_FILES=($DEST_DIR/*.(JPG|RAF|jpg|raf))
-    MAXSEQ=0
+    if [[ -d "$DEST_DIR" ]]; then
+        DEST_FILES=($DEST_DIR/*.(JPG|RAF|jpg|raf))
+        MAXSEQ=0
 
-    for FILE in $DEST_FILES
-    do
-        HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
-        DEST_FILE_HASHES[$HASH]=$FILE
+        for FILE in $DEST_FILES
+        do
+            HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
+            DEST_FILE_HASHES[$HASH]=$FILE
 
-        FILENAME=$(basename $FILE)
+            FILENAME=$(basename $FILE)
 
-        # Get the sequence number from a filename like 130825_0001.JPG
-        SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|jpg|raf)}
-        SEQ=`expr 0 + $SEQSTR`
+            # Get the sequence number from a filename like 130825_0001.JPG
+            SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|jpg|raf)}
+            SEQ=`expr 0 + $SEQSTR`
 
-        if [[ $SEQ -gt $MAXSEQ ]]; then
-            MAXSEQ=$SEQ
-        fi
-    done
+            if [[ $SEQ -gt $MAXSEQ ]]; then
+                MAXSEQ=$SEQ
+            fi
+        done
 
-    DEST_DIR_MAXSEQ[$DEST_DIR]=$MAXSEQ
-    logKeyValue $DEST_DIR "$#DEST_FILES files, max seq = $MAXSEQ"
+        DEST_DIR_MAXSEQ[$DEST_DIR]=$MAXSEQ
+        logKeyValue $DEST_DIR "$#DEST_FILES files, max seq = $MAXSEQ"
+    else
+        logKeyValue $DEST_DIR "does not exist"
+    fi
 done
 
 echo "# hashes = $#DEST_FILE_HASHES"
@@ -159,13 +164,16 @@ echo "# hashes = $#DEST_FILE_HASHES"
 
 logSectionTitle "copying files"
 
-# Sort the sort keys
-SORT_KEYS_ASC=${(ko@)SORT_KEY_HASHES}
+# Sort the sort keys. For some reason doing this w/ ${ko@)SORT_KEY_HASHES} doesn't work.
+declare -a SORT_KEYS
+SORT_KEYS=( $(for k in ${(k)SORT_KEY_HASHES}; do echo $k; done | sort) )
 
 # Iterate over the sort keys / files
 N_COPIED=0
-for SORT_KEY in $SORT_KEYS_ASC
+for SORT_KEY in $SORT_KEYS
 do
+    log "SORT_KEY=$SORT_KEY"
+
     HASH=$SORT_KEY_HASHES[$SORT_KEY]
     FILE=$SORT_KEY_FILES[$SORT_KEY]
     DEST_DIR=$FILE_DEST_DIRS[$FILE]
