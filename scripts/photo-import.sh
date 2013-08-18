@@ -2,6 +2,8 @@
 
 DEFAULT_SRC=/media
 DEFAULT_DEST=~/photos
+# TODO: Stop repeating pattern
+# TODO: Make extensions an option
 EXT_PATTERN="JPG|RAF|jpg|raf"
 
 ####################################################################################################
@@ -78,7 +80,7 @@ fi
 ####################################################################################################
 
 # Get the file list
-FILES=($SRC/**/*.(JPG|RAF))
+FILES=($SRC/**/*.(JPG|RAF|jpg|raf))
 logSectionTitle "analyzing $#FILES source files"
 
 # Declare associative arrays
@@ -98,7 +100,7 @@ do
     CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 1)
     CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
     FILENAME=$(basename $FILE)
-    BASE=${FILENAME%%.(JPG|RAF)}
+    BASE=${FILENAME%%.(JPG|RAF|jpg|raf)}
     EXT=${FILENAME##$BASE.}
     SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
@@ -126,7 +128,7 @@ declare -A DEST_DIR_MAXSEQ
 
 for DEST_DIR in ${(k)DEST_DIRS}
 do
-    DEST_FILES=($DEST_DIR/*.(JPG|RAF))
+    DEST_FILES=($DEST_DIR/*.(JPG|RAF|jpg|raf))
     MAXSEQ=0
 
     for FILE in $DEST_FILES
@@ -137,7 +139,7 @@ do
         FILENAME=$(basename $FILE)
 
         # Get the sequence number from a filename like 130825_0001.JPG
-        SEQSTR=${${FILENAME##*_}%%.(JPG|RAF)}
+        SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|jpg|raf)}
         SEQ=`expr 0 + $SEQSTR`
 
         if [[ $SEQ -gt $MAXSEQ ]]; then
