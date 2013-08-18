@@ -11,14 +11,18 @@ EXT_PATTERN="JPG|RAF|jpg|raf"
 # Evals or simulates a string based on the --simulate flag
 function evalOrSimulate {
     if [ ${FLAGS_simulate} -eq ${FLAGS_TRUE} ]; then
-        echo $1 >&2
+        log $1
     else
         eval $1 >&2
     fi
 }
 
+function log { echo -e "$1" >&2 }
+function logSectionTitle { log "\n$1:" }
+function logKeyValue { log "$1 -> $2" }
+
 function error {
-    echo "error: $1" >&2
+    log "error: $1"
     exit 1
 }
 
@@ -57,13 +61,13 @@ elif [ $# -eq 2 ]; then
     SRC=$1
     DEST=$2
 else
-    echo "error: too many arguments ($#)" >&2
+    log "error: too many arguments ($#)"
     flags_help
     exit 1
 fi
 
-echo source = $SRC >&2
-echo destination = $DEST >&2
+logKeyValue "source" $SRC
+logKeyValue "destination" $DEST
 
 if [[ ! -d "$SRC" ]]; then
     error "source does not exist"
@@ -75,7 +79,7 @@ fi
 
 # Get the file list
 FILES=($SRC/**/*.(JPG|RAF))
-echo "found $#FILES files" >&2
+logSectionTitle "analyzing $#FILES source files"
 
 # Declare associative arrays
 declare -A FILE_CREATE_DATE
@@ -95,7 +99,7 @@ do
     CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
     FILENAME=$(basename $FILE)
     BASE=${FILENAME%%.(JPG|RAF)}
-    EXT=${FILENAME##$BASE}
+    EXT=${FILENAME##$BASE.}
     SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
     DEST_DIR=$DEST/$CREATE_DATE
@@ -108,13 +112,14 @@ do
     SORT_KEY_FILES[$SORT_KEY]=$FILE
     SORT_KEY_HASHES[$SORT_KEY]=$HASH
     DEST_DIRS[$DEST_DIR]=true
+    logKeyValue $FILE "SORT_KEY=$SORT_KEY, DEST_DIR=$DEST_DIR"
 done
 
 ####################################################################################################
 # Process dest file contents
 ####################################################################################################
 
-echo -e "\nscanning $#DEST_DIRS destination directories..." >&2
+logSectionTitle "scanning $#DEST_DIRS destination directories"
 
 declare -A DEST_FILE_HASHES
 declare -A DEST_DIR_MAXSEQ
@@ -141,7 +146,7 @@ do
     done
 
     DEST_DIR_MAXSEQ[$DEST_DIR]=$MAXSEQ
-    echo "$DEST_DIR: $#DEST_FILES files, max seq = $MAXSEQ" >&2
+    logKeyValue $DEST_DIR "$#DEST_FILES files, max seq = $MAXSEQ"
 done
 
 echo "# hashes = $#DEST_FILE_HASHES"
@@ -150,7 +155,7 @@ echo "# hashes = $#DEST_FILE_HASHES"
 # Copy files
 ####################################################################################################
 
-echo -e "\ncopying files..." >&2
+logSectionTitle "copying files"
 
 # Sort the sort keys
 SORT_KEYS_ASC=${(ko@)SORT_KEY_HASHES}
@@ -198,20 +203,20 @@ do
 
         # Compute the destination path
         FILENAME=$(basename $FILE)
-        DEST_PATH=$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ)$EXT
+        DEST_PATH="$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ).$EXT"
 
         # Copy the file
         evalOrSimulate "cp -nv $FILE $DEST_PATH"
         N_COPIED=$((N_COPIED+1))
     else
-        echo "$FILE -> $STATUS" >&2
+        logKeyValue $FILE $STATUS
     fi
 done
 
 # Print stats
-echo -e "\nstatistics..."
+logSectionTitle "statistics"
 N_FILES=$#SORT_KEY_FILES
-echo "# files = $N_FILES"
-echo "# copied = $N_COPIED"
-echo "# skipped = $((N_FILES-N_COPIED))"
+logKeyValue "# files" $N_FILES
+logKeyValue "# copied" $N_COPIED
+logKeyValue "# skipped" $((N_FILES-N_COPIED))
 
