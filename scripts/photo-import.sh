@@ -161,8 +161,7 @@ do
     BASE=$FILE_BASES[$FILE]
 
     # Validate
-    # TODO: Match sort key against regex
-    if [[ $SORT_KEY == "xxx" ]]; then
+    if [[ ! "$SORT_KEY" =~ "^[0-9]{6}-[0-9]{6}-[A-Za-z0-9]+" ]]; then
         STATUS="invalid sort key ($SORT_KEY)"
     elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
         STATUS="duplicate"
