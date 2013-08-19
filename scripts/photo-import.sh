@@ -1,7 +1,7 @@
 #!/usr/bin/zsh --sh-word-split
 
-DEFAULT_SRC=/media
-DEFAULT_DEST=~/photos
+DEFAULT_SRC=/media/$USER
+DEFAULT_DEST=~/photos/imported
 # TODO: Stop repeating pattern
 # TODO: Make extensions an option
 EXT_PATTERN="JPG|RAF|jpg|raf"
@@ -103,7 +103,7 @@ do
     FILENAME=$(basename $FILE)
     BASE=${FILENAME%%.(JPG|RAF|jpg|raf)}
     EXT=${FILENAME##$BASE.}
-    SORT_KEY="$CREATE_DATE:$CREATE_TIME:$BASE:$EXT"
+    SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
     DEST_DIR=$DEST/$CREATE_DATE
 
@@ -172,8 +172,6 @@ SORT_KEYS=( $(for k in ${(k)SORT_KEY_HASHES}; do echo $k; done | sort) )
 N_COPIED=0
 for SORT_KEY in $SORT_KEYS
 do
-    log "SORT_KEY=$SORT_KEY"
-
     HASH=$SORT_KEY_HASHES[$SORT_KEY]
     FILE=$SORT_KEY_FILES[$SORT_KEY]
     DEST_DIR=$FILE_DEST_DIRS[$FILE]
