@@ -189,3 +189,15 @@ autocmd FileType html,xhtml,xml setlocal expandtab shiftwidth=2 tabstop=2 softta
 autocmd FileType css setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
 autocmd FileType javascript setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 let javascript_enable_domhtmlcss=1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Encodings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" See http://vim.wikia.com/wiki/Working_with_Unicode#References
+if has("multi_byte")
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  "setglobal bomb
+  set fileencodings=ucs-bom,utf-8,latin1
+endif
