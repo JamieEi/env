@@ -186,4 +186,3 @@ path=($^path(N))
 # Start @ home
 cd
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
