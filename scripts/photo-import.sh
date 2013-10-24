@@ -1,11 +1,11 @@
 #!/usr/bin/zsh --sh-word-split
 
 DEFAULT_SRC=/media/$USER
-DEFAULT_DEST=~/photos/imported
+DEFAULT_DEST=~/photos/raw
 DEFAULT_BACKUP_DEST=~/photos/backup
 # TODO: Stop repeating pattern
 # TODO: Make extensions an option
-EXT_PATTERN="JPG|RAF|jpg|raf"
+EXT_PATTERN="JPG|RAF|MOV|jpg|raf|mov"
 
 ####################################################################################################
 # Helper functions
@@ -87,7 +87,7 @@ fi
 ####################################################################################################
 
 # Get the file list
-FILES=($SRC/**/*.(JPG|RAF|jpg|raf))
+FILES=($SRC/**/*.(JPG|RAF|MOV|jpg|raf|mov))
 logSectionTitle "analyzing $#FILES source files"
 
 # Declare associative arrays
@@ -107,7 +107,7 @@ do
     CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 1)
     CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
     FILENAME=$(basename $FILE)
-    BASE=${FILENAME%%.(JPG|RAF|jpg|raf)}
+    BASE=${FILENAME%%.(JPG|RAF|MOV|jpg|raf|mov)}
     EXT=${FILENAME##$BASE.}
     SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
@@ -141,7 +141,7 @@ declare -A DEST_DIR_MAXSEQ
 for DEST_DIR in ${(k)DEST_DIRS}
 do
     if [[ -d "$DEST_DIR" ]]; then
-        DEST_FILES=($DEST_DIR/*.(JPG|RAF|jpg|raf))
+        DEST_FILES=($DEST_DIR/*.(JPG|RAF|MOV|jpg|raf|mov))
         MAXSEQ=0
 
         for FILE in $DEST_FILES
@@ -152,7 +152,7 @@ do
             FILENAME=$(basename $FILE)
 
             # Get the sequence number from a filename like 130825_0001.JPG
-            SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|jpg|raf)}
+            SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|MOV|jpg|raf|mov)}
             SEQ=`expr 0 + $SEQSTR`
 
             if [[ $SEQ -gt $MAXSEQ ]]; then
