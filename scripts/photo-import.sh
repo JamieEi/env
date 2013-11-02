@@ -211,14 +211,14 @@ do
             fi
             
             # Create a backup directory simlink
-            if [ ${FLAGS_backup} -eq ${FLAGS_TRUE} ]; then
-                BACKUP_DIR=$DEFAULT_BACKUP_DEST/$(basename $DEST_DIR)
-                if [[ -d $BACKUP_DIR ]]; then
-                    logKeyValue $BACKUP_DIR "exists"
-                else
-                    evalOrSimulate "ln -srv $DEST_DIR $BACKUP_DIR"
-                fi
-            fi
+            #if [ ${FLAGS_backup} -eq ${FLAGS_TRUE} ]; then
+            #    BACKUP_DIR=$DEFAULT_BACKUP_DEST/$(basename $DEST_DIR)
+            #    if [[ -d $BACKUP_DIR ]]; then
+            #        logKeyValue $BACKUP_DIR "exists"
+            #    else
+            #        evalOrSimulate "ln -srv $DEST_DIR $BACKUP_DIR"
+            #    fi
+            #fi
         fi
         LASTDIR=$DEST_DIR
 
