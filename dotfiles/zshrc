@@ -177,6 +177,10 @@ fi
 # Add to path
 PATH=~/bin:$PATH
 path+=~/scripts
+path+=~/opt/android-studio/bin
+
+# Remove path duplicates
+typeset -U PATH
 
 # Remove any entries that don't exist
 # http://stackoverflow.com/questions/9347478/how-to-edit-path-variable-in-zsh
