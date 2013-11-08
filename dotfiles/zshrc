@@ -29,6 +29,9 @@ alias lt='ls -lth'
 alias lal='la -l'
 alias lla='lal'
 
+# other
+alias gw='./gradlew'
+
 #--------------------------------------------------------------------------------
 # History
 #--------------------------------------------------------------------------------
@@ -113,12 +116,6 @@ function ck2-load-latest {
 }
 
 #--------------------------------------------------------------------------------
-# Glacier CLI 
-#--------------------------------------------------------------------------------
-
-function glacier { java -jar $GLACIER_CLI -region us-west-2 $* }
-
-#--------------------------------------------------------------------------------
 # Misc 
 #--------------------------------------------------------------------------------
 
@@ -161,16 +158,16 @@ if [[ -e ~/.zshrc_amazon ]]; then
     source ~/.zshrc_amazon
 fi
 
+if [[ -e ~/.zshrc_home ]]; then
+    source ~/.zshrc_home
+fi
+
 if [[ -e ~/.zshrc_local ]]; then
     source ~/.zshrc_local
 fi
 
 if [[ -e ~/.zshrc_private ]]; then
     source ~/.zshrc_private
-fi
-
-if [[ -e ~/.zshrc_home ]]; then
-    source ~/.zshrc_home
 fi
 
 #--------------------------------------------------------------------------------
@@ -180,6 +177,10 @@ fi
 # Add to path
 PATH=~/bin:$PATH
 path+=~/scripts
+path+=~/opt/android-studio/bin
+
+# Remove path duplicates
+typeset -U PATH
 
 # Remove any entries that don't exist
 # http://stackoverflow.com/questions/9347478/how-to-edit-path-variable-in-zsh

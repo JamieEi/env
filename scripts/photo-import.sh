@@ -1,10 +1,11 @@
 #!/usr/bin/zsh --sh-word-split
 
-DEFAULT_SRC=/media
-DEFAULT_DEST=~/photos
+DEFAULT_SRC=/media/$USER
+DEFAULT_DEST=~/photos/raw
+DEFAULT_BACKUP_DEST=~/photos/backup
 # TODO: Stop repeating pattern
 # TODO: Make extensions an option
-EXT_PATTERN="JPG|RAF|jpg|raf"
+EXT_PATTERN="JPG|RAF|MOV|jpg|raf|mov"
 
 ####################################################################################################
 # Helper functions
@@ -46,6 +47,8 @@ FLAGS_PARENT=$0
 
 # Configure shflags
 # TODO: debug flag: more detail, implies simulate
+DEFINE_boolean 'backup' true 'create backup directory simlink' 'b'
+DEFINE_string 'keyword' '' 'keyword for destination directory and file name' 'k'
 DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
 # Parse flags & options
@@ -71,6 +74,9 @@ fi
 
 logKeyValue "source" $SRC
 logKeyValue "destination" $DEST
+logKeyValue "backup" ${FLAGS_backup}
+logKeyValue "keyword" ${FLAGS_keyword}
+logKeyValue "simulate" ${FLAGS_simulate}
 
 if [[ ! -d "$SRC" ]]; then
     error "source does not exist"
@@ -81,7 +87,7 @@ fi
 ####################################################################################################
 
 # Get the file list
-FILES=($SRC/**/*.(JPG|RAF|jpg|raf))
+FILES=($SRC/**/*.(JPG|RAF|MOV|jpg|raf|mov))
 logSectionTitle "analyzing $#FILES source files"
 
 # Declare associative arrays
@@ -101,11 +107,16 @@ do
     CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 1)
     CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
     FILENAME=$(basename $FILE)
-    BASE=${FILENAME%%.(JPG|RAF|jpg|raf)}
+    BASE=${FILENAME%%.(JPG|RAF|MOV|jpg|raf|mov)}
     EXT=${FILENAME##$BASE.}
-    SORT_KEY="$CREATE_DATE:$CREATE_TIME:$BASE:$EXT"
+    SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
-    DEST_DIR=$DEST/$CREATE_DATE
+
+    if [[ -n ${FLAGS_keyword} ]]; then
+        DEST_DIR=$DEST/${CREATE_DATE}_${FLAGS_keyword}
+    else
+        DEST_DIR=$DEST/$CREATE_DATE
+    fi
 
     FILE_CREATE_DATE[$FILE]=$CREATE_DATE
     FILE_CREATE_TIME[$FILE]=$CREATE_TIME
@@ -115,7 +126,7 @@ do
     SORT_KEY_FILES[$SORT_KEY]=$FILE
     SORT_KEY_HASHES[$SORT_KEY]=$HASH
     DEST_DIRS[$DEST_DIR]=true
-    logKeyValue $FILE "SORT_KEY=$SORT_KEY, DEST_DIR=$DEST_DIR"
+    log $FILE
 done
 
 ####################################################################################################
@@ -130,7 +141,7 @@ declare -A DEST_DIR_MAXSEQ
 for DEST_DIR in ${(k)DEST_DIRS}
 do
     if [[ -d "$DEST_DIR" ]]; then
-        DEST_FILES=($DEST_DIR/*.(JPG|RAF|jpg|raf))
+        DEST_FILES=($DEST_DIR/*.(JPG|RAF|MOV|jpg|raf|mov))
         MAXSEQ=0
 
         for FILE in $DEST_FILES
@@ -141,7 +152,7 @@ do
             FILENAME=$(basename $FILE)
 
             # Get the sequence number from a filename like 130825_0001.JPG
-            SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|jpg|raf)}
+            SEQSTR=${${FILENAME##*_}%%.(JPG|RAF|MOV|jpg|raf|mov)}
             SEQ=`expr 0 + $SEQSTR`
 
             if [[ $SEQ -gt $MAXSEQ ]]; then
@@ -155,8 +166,6 @@ do
         logKeyValue $DEST_DIR "does not exist"
     fi
 done
-
-echo "# hashes = $#DEST_FILE_HASHES"
 
 ####################################################################################################
 # Copy files
@@ -172,8 +181,6 @@ SORT_KEYS=( $(for k in ${(k)SORT_KEY_HASHES}; do echo $k; done | sort) )
 N_COPIED=0
 for SORT_KEY in $SORT_KEYS
 do
-    log "SORT_KEY=$SORT_KEY"
-
     HASH=$SORT_KEY_HASHES[$SORT_KEY]
     FILE=$SORT_KEY_FILES[$SORT_KEY]
     DEST_DIR=$FILE_DEST_DIRS[$FILE]
@@ -202,6 +209,16 @@ do
             if [ ! -d "$DEST_DIR" ]; then
                 evalOrSimulate "mkdir -pv $DEST_DIR"
             fi
+            
+            # Create a backup directory simlink
+            #if [ ${FLAGS_backup} -eq ${FLAGS_TRUE} ]; then
+            #    BACKUP_DIR=$DEFAULT_BACKUP_DEST/$(basename $DEST_DIR)
+            #    if [[ -d $BACKUP_DIR ]]; then
+            #        logKeyValue $BACKUP_DIR "exists"
+            #    else
+            #        evalOrSimulate "ln -srv $DEST_DIR $BACKUP_DIR"
+            #    fi
+            #fi
         fi
         LASTDIR=$DEST_DIR
 
@@ -213,7 +230,7 @@ do
 
         # Compute the destination path
         FILENAME=$(basename $FILE)
-        DEST_PATH="$DEST_DIR/${CREATE_DATE}_$(printf '%04d' $SEQ).$EXT"
+        DEST_PATH="$DEST_DIR/$(basename $DEST_DIR)_$(printf '%04d' $SEQ).$EXT"
 
         # Copy the file
         evalOrSimulate "cp -nv $FILE $DEST_PATH"
