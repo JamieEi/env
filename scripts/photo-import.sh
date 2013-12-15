@@ -49,6 +49,7 @@ FLAGS_PARENT=$0
 # TODO: debug flag: more detail, implies simulate
 DEFINE_boolean 'backup' true 'create backup directory simlink' 'b'
 DEFINE_string 'keyword' '' 'keyword for destination directory and file name' 'k'
+DEFINE_string 'minDate' '' 'min EXIF create date in form YYMMDD' 'd'
 DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
 # Parse flags & options
@@ -76,11 +77,14 @@ logKeyValue "source" $SRC
 logKeyValue "destination" $DEST
 logKeyValue "backup" ${FLAGS_backup}
 logKeyValue "keyword" ${FLAGS_keyword}
+logKeyValue "minDate" ${FLAGS_minDate}
 logKeyValue "simulate" ${FLAGS_simulate}
 
 if [[ ! -d "$SRC" ]]; then
     error "source does not exist"
 fi
+
+#if [[ -n "${FLAGS_minDate}" && "${FLAGS_minDate} 
 
 ####################################################################################################
 # Get file data
