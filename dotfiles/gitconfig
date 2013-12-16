@@ -3,6 +3,7 @@
     co = checkout
     ci = commit -a
     files = show --oneline
+    fix = commit -a --amend -C HEAD
     graph = log --graph --decorate --all
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
