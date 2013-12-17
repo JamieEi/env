@@ -170,7 +170,7 @@ do
     fi
 done
 
-DEST_MAX_DIR=$(find photos/raw -type d | sort | tail -n 1)
+DEST_MAX_DIR=$(basename $(find photos/raw -type d | sort | tail -n 1))
 logKeyValue "destination max dir" $DEST_MAX_DIR
 
 ####################################################################################################
@@ -197,7 +197,7 @@ do
     # Validate
     if [[ ! "$SORT_KEY" =~ "^[0-9]{6}-[0-9]{6}-[A-Za-z0-9]+" ]]; then
         STATUS="invalid sort key ($SORT_KEY)"
-    elif [[ "$DEST_DIR" < "$DEST_MAX_DIR" ]]; then
+    elif [[ $(basename "$DEST_DIR") < "$DEST_MAX_DIR" ]]; then
         STATUS="old"
     elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
         STATUS="duplicate"
