@@ -49,6 +49,8 @@ FLAGS_PARENT=$0
 # TODO: debug flag: more detail, implies simulate
 DEFINE_boolean 'backup' true 'create backup directory simlink' 'b'
 DEFINE_string 'keyword' '' 'keyword for destination directory and file name' 'k'
+DEFINE_string 'minDate' '' 'min EXIF create date in form YYMMDD' 'd'
+DEFINE_boolean 'old' false 'import files older than last import' 'o'
 DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
 # Parse flags & options
@@ -76,6 +78,7 @@ logKeyValue "source" $SRC
 logKeyValue "destination" $DEST
 logKeyValue "backup" ${FLAGS_backup}
 logKeyValue "keyword" ${FLAGS_keyword}
+logKeyValue "minDate" ${FLAGS_minDate}
 logKeyValue "simulate" ${FLAGS_simulate}
 
 if [[ ! -d "$SRC" ]]; then
@@ -167,6 +170,9 @@ do
     fi
 done
 
+DEST_MAX_DIR=$(basename $(find photos/raw -type d | sort | tail -n 1))
+logKeyValue "destination max dir" $DEST_MAX_DIR
+
 ####################################################################################################
 # Copy files
 ####################################################################################################
@@ -191,6 +197,8 @@ do
     # Validate
     if [[ ! "$SORT_KEY" =~ "^[0-9]{6}-[0-9]{6}-[A-Za-z0-9]+" ]]; then
         STATUS="invalid sort key ($SORT_KEY)"
+    elif [[ $(basename "$DEST_DIR") < "$DEST_MAX_DIR" ]]; then
+        STATUS="old"
     elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
         STATUS="duplicate"
     else

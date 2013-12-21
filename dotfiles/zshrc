@@ -178,6 +178,8 @@ fi
 PATH=~/bin:$PATH
 path+=~/scripts
 path+=~/opt/android-studio/bin
+path+=~/opt/idea/bin
+path+=~/opt/gradle/bin
 
 # Remove path duplicates
 typeset -U PATH
