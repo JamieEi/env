@@ -1,29 +1,16 @@
+/idea/config/componentVersions/
+/idea/config/tasks/
+/idea/config/port
 
-#ignore thumbnails created by windows
-Thumbs.db
-#Ignore files build by Visual Studio
-*.obj
-*.exe
-*.pdb
-*.user
-*.aps
-*.pch
-*.vspscc
-*_i.c
-*_p.c
-*.ncb
-*.suo
-*.tlb
-*.tlh
-*.bak
-*.cache
-*.ilk
-*.log
-[Bb]in
-[Dd]ebug*/
-*.lib
-*.sbr
-obj/
-[Rr]elease*/
-_ReSharper*/
-[Tt]est[Rr]esult*
+idea/config/options/appComponentVersions.xml
+idea/config/options/feature.usage.statistics.xml
+idea/config/options/jdk.table.xml
+idea/config/options/options.xml
+idea/config/options/path.macros.xml
+idea/config/options/project.default.xml
+idea/config/options/runner.layout.xml
+idea/config/options/statistics.application.usages.xml
+idea/config/options/usage.statistics.xml
+idea/config/options/vcs.xml
+idea/config/options/window.manager.xml
+

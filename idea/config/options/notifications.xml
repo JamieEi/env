@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <component name="NotificationConfiguration">
+    <notification groupId="Android Module Importing" />
+    <notification groupId="Groovy DSL errors" />
+    <notification groupId="Framework Detection" />
+    <notification groupId="Android Property Files Updating" />
+    <notification groupId="IDE Usage Statistics" displayType="STICKY_BALLOON" shouldLog="false" />
+    <notification groupId="Git Messages" displayType="TOOL_WINDOW" />
+    <notification groupId="Git Important Messages" displayType="STICKY_BALLOON" />
+    <notification groupId="Git Minor Notifications" />
+    <notification groupId="External Executable Critical Failures" displayType="STICKY_BALLOON" />
+    <notification groupId="Compiler" displayType="NONE" />
+    <notification groupId="Maven Import" displayType="STICKY_BALLOON" />
+    <notification groupId="notification.group.id.gradle" displayType="TOOL_WINDOW" />
+    <notification groupId="FindInPath" displayType="TOOL_WINDOW" shouldLog="false" />
+    <notification groupId="Clean artifact" />
+    <notification groupId="Grape" />
+    <notification groupId="IDE Fatal Errors" displayType="NONE" />
+    <notification groupId="Update Checker" displayType="STICKY_BALLOON" />
+    <notification groupId="System Messages" />
+    <notification groupId="Android Session Restarted" displayType="TOOL_WINDOW" />
+    <notification groupId="Vcs Important Messages" displayType="STICKY_BALLOON" />
+    <notification groupId="Vcs Minor Notifications" />
+    <notification groupId="Android/Gradle Notification Group" />
+    <notification groupId="Project Loading Error" />
+    <notification groupId="Error Report" />
+    <notification groupId="Execution" displayType="NONE" />
+    <toolWindow group="Git Messages" />
+    <toolWindow group="notification.group.id.gradle" />
+    <toolWindow group="FindInPath" />
+    <toolWindow group="Android Session Restarted" />
+  </component>
+</application>
+
