@@ -40,6 +40,7 @@ Bundle 'gregsexton/gitv'
 "Bundle 'FuzzyFinder'
 "Bundle 'git://git.wincent.com/command-t.git' 
 Bundle 'tfnico/vim-gradle'
+Bundle 'jngeist/vim-multimarkdown'
 
 let g:yankring_history_dir = '~/.vim'
 let g:yankring_history_file = 'yankring_history'
