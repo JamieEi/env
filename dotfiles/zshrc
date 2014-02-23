@@ -195,3 +195,6 @@ path=($^path(N))
 
 # Start @ home
 cd
+
+#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
+[[ -s "/home/jamie/.gvm/bin/gvm-init.sh" ]] && source "/home/jamie/.gvm/bin/gvm-init.sh"
