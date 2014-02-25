@@ -9,6 +9,9 @@ Host eos
 Host luna
     HostName 192.168.1.35
 
+Host nyx
+    HostName 192.168.1.207
+
 Host roku
     HostName 192.168.1.185
 
