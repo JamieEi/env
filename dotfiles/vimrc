@@ -40,7 +40,9 @@ Bundle 'gregsexton/gitv'
 "Bundle 'FuzzyFinder'
 "Bundle 'git://git.wincent.com/command-t.git' 
 Bundle 'tfnico/vim-gradle'
-Bundle 'jngeist/vim-multimarkdown'
+"Bundle 'jngeist/vim-multimarkdown'
+Bundle 'vim-pandoc/vim-pantondoc'
+Bundle 'vim-pandoc/vim-pandoc-syntax'
 
 let g:yankring_history_dir = '~/.vim'
 let g:yankring_history_file = 'yankring_history'
@@ -124,8 +126,11 @@ nore , ;
 set scrolloff=1
 set sidescrolloff=15
 set sidescroll=1
-set nowrap
 set whichwrap+=b,s,<,>,[,]
+
+" Text wrapping
+set textwidth=100
+set nowrap
 
 " Swap files must die
 if has("win32") || has("win64")

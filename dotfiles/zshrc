@@ -180,6 +180,8 @@ path+=~/scripts
 path+=~/opt/android-studio/bin
 path+=~/opt/idea/bin
 path+=~/opt/gradle/bin
+path+=~/.cabal/bin
+poath+=~/Cloud9BrazilBuild-1.0/bin
 
 # Remove path duplicates
 typeset -U PATH
@@ -194,3 +196,6 @@ path=($^path(N))
 
 # Start @ home
 cd
+
+#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
+[[ -s "/home/local/ANT/jamieei/.gvm/bin/gvm-init.sh" ]] && source "/home/local/ANT/jamieei/.gvm/bin/gvm-init.sh"
