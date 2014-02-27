@@ -155,8 +155,8 @@ alias vbm='VBoxManage $*'
 #--------------------------------------------------------------------------------
 
 if [[ -e ~/.boto ]]; then
-    export AWS_ACCESS_KEY_ID=$(cat ~/.boto | grep -i AWS_ACCESS_KEY_ID | sed 's/^.*=\s*//')
-    export AWS_SECRET_ACCESS_KEY=$(cat ~/.boto | grep -i AWS_SECRET_ACCESS_KEY | sed 's/^.*=\s*//')
+    export AWS_ACCESS_KEY_ID="$(cat ~/.boto | grep -i AWS_ACCESS_KEY_ID | sed 's/^.*=\s*//')"
+    export AWS_SECRET_ACCESS_KEY="$(cat ~/.boto | grep -i AWS_SECRET_ACCESS_KEY | sed 's/^.*=\s*//')"
 fi
 
 #--------------------------------------------------------------------------------
