@@ -1,0 +1,39 @@
+export ANDROID_HOME=~/opt/android-sdk-linux
+export ANDROID_SDK=~/opt/android-sdk-linux
+
+#--------------------------------------------------------------------------------
+# Path
+#--------------------------------------------------------------------------------
+
+PATH=~/bin:$PATH
+
+path+=~/scripts
+path+=~/opt/android-studio/bin
+path+=~/opt/idea/bin
+path+=~/opt/gradle/bin
+path+=~/.cabal/bin
+path+=$ANDROID_SDK/tools
+path+=$ANDROID_SDK/platform-tools
+path+=~/opt/ant/bin
+
+#--------------------------------------------------------------------------------
+# Local overrides
+#--------------------------------------------------------------------------------
+
+for f in ~/.zshenv_*
+do
+    source $f
+done
+
+#--------------------------------------------------------------------------------
+# Path
+#--------------------------------------------------------------------------------
+
+# Remove path duplicates
+typeset -U PATH
+
+# Remove any entries that don't exist
+# http://stackoverflow.com/questions/9347478/how-to-edit-path-variable-in-zsh
+path=($^path(N))
+
+
