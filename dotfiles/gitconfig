@@ -27,3 +27,6 @@
     autosetuprebase = always
 [receive]
     denyCurrentBranch = warn
+[user]
+	name = Jamie Eisenhart
+	email = jamie@jamieei.org
