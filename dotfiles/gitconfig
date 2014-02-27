@@ -22,8 +22,11 @@
 [core]
 	pager = less -FMRiX
 [push]
-	default = simple
+	#default = simple
 [branch]
     autosetuprebase = always
 [receive]
     denyCurrentBranch = warn
+[user]
+	name = Jamie Eisenhart
+	email = jamie@jamieei.org

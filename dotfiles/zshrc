@@ -184,8 +184,7 @@ fi
 #--------------------------------------------------------------------------------
 
 # Add to path
-PATH=~/bin:$PATH
-path+=~/scripts
+PATH=~/scripts:~/bin:$PATH
 path+=~/opt/android-studio/bin
 path+=~/opt/idea/bin
 path+=~/opt/gradle/bin
