@@ -18,7 +18,7 @@ path+=~/opt/ant/bin
 # Local overrides
 #--------------------------------------------------------------------------------
 
-for f in ~/.zshenv_*
+for f in $(find ~ -name '.zshenv_*')
 do
     source $f
 done
