@@ -82,6 +82,7 @@ logKeyValue "backup" ${FLAGS_backup}
 logKeyValue "keyword" ${FLAGS_keyword}
 logKeyValue "minDate" ${FLAGS_minDate}
 logKeyValue "movieDest" $MOVIE_DEST
+logKeyValue "old" ${FLAGS_old}
 logKeyValue "simulate" ${FLAGS_simulate}
 
 if [[ ! -d "$SRC" ]]; then
@@ -205,7 +206,7 @@ do
     # Validate
     if [[ ! "$SORT_KEY" =~ "^[0-9]{6}-[0-9]{6}-[A-Za-z0-9]+" ]]; then
         STATUS="invalid sort key ($SORT_KEY)"
-    elif [[ $(basename "$DEST_DIR") < "$DEST_MAX_DIR" ]]; then
+    elif [[ ${FLAGS_old} -eq ${FLAGS_FALSE} && $(basename "$DEST_DIR") < "$DEST_MAX_DIR" ]]; then
         STATUS="old"
     elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
         STATUS="duplicate"
