@@ -2,9 +2,11 @@
 
 DEFAULT_SRC=/media/$USER
 DEFAULT_DEST=~/photos/raw
-DEFAULT_BACKUP_DEST=~/photos/backup
+DEFAULT_MOVIE_DEST=~/movies/raw
+DEFAULT_BACKUP_DEST=~/backups
 # TODO: Stop repeating pattern
 # TODO: Make extensions an option
+# TODO: Fix backup
 EXT_PATTERN="JPG|RAF|MOV|jpg|raf|mov"
 
 ####################################################################################################
@@ -48,8 +50,10 @@ FLAGS_PARENT=$0
 # Configure shflags
 # TODO: debug flag: more detail, implies simulate
 DEFINE_boolean 'backup' true 'create backup directory simlink' 'b'
+DEFINE_string 'dest' $DEFAULT_DEST 'photo destination directory' 
 DEFINE_string 'keyword' '' 'keyword for destination directory and file name' 'k'
-DEFINE_string 'minDate' '' 'min EXIF create date in form YYMMDD' 'd'
+DEFINE_string 'minDate' '' 'min EXIF create date in form YYMMDD'
+DEFINE_string 'movieDest' $DEFAULT_MOVIE_DEST 'movie destination directory' 
 DEFINE_boolean 'old' false 'import files older than last import' 'o'
 DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
@@ -61,24 +65,24 @@ eval set -- "${FLAGS_ARGV}"
 # Parse positional arguments
 if [ $# -eq 0 ]; then
     SRC=$DEFAULT_SRC
-    DEST=$DEFAULT_DEST
 elif [ $# -eq 1 ]; then
     SRC=$1
-    DEST=$DEFAULT_DEST
-elif [ $# -eq 2 ]; then
-    SRC=$1
-    DEST=$2
 else
     log "error: too many arguments ($#)"
     flags_help
     exit 1
 fi
 
+DEST=${FLAGS_dest}
+MOVIE_DEST=${FLAGS_movieDest}
+
 logKeyValue "source" $SRC
 logKeyValue "destination" $DEST
 logKeyValue "backup" ${FLAGS_backup}
 logKeyValue "keyword" ${FLAGS_keyword}
 logKeyValue "minDate" ${FLAGS_minDate}
+logKeyValue "movieDest" $MOVIE_DEST
+logKeyValue "old" ${FLAGS_old}
 logKeyValue "simulate" ${FLAGS_simulate}
 
 if [[ ! -d "$SRC" ]]; then
@@ -106,19 +110,24 @@ declare -A DEST_DIRS
 # Get file data
 for FILE in $FILES
 do
-    EXIF=$(exiftool -EXIF:CreateDate -t -d '%y%m%d %H%M%S' $FILE | cut -f 2)
-    CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 1)
-    CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 2)
+    EXIF=$(exiftool -EXIF:CreateDate -t -d '%Y %y%m%d %H%M%S' $FILE | cut -f 2)
+    CREATE_YEAR=$(echo $EXIF | cut -d ' ' -f 1)
+    CREATE_DATE=$(echo $EXIF | cut -d ' ' -f 2)
+    CREATE_TIME=$(echo $EXIF | cut -d ' ' -f 3)
     FILENAME=$(basename $FILE)
     BASE=${FILENAME%%.(JPG|RAF|MOV|jpg|raf|mov)}
     EXT=${FILENAME##$BASE.}
     SORT_KEY="$CREATE_DATE-$CREATE_TIME-$BASE-$EXT"
     HASH=$(sha1sum $FILE | cut -f 1 -d ' ')
 
-    if [[ -n ${FLAGS_keyword} ]]; then
-        DEST_DIR=$DEST/${CREATE_DATE}_${FLAGS_keyword}
+    if [[ $EXT == (#i)'mov' ]]; then
+        DEST_DIR=$MOVIE_DEST/${CREATE_YEAR}/$CREATE_DATE
     else
-        DEST_DIR=$DEST/$CREATE_DATE
+        DEST_DIR=$DEST/${CREATE_YEAR}/$CREATE_DATE
+    fi
+
+    if [[ -n ${FLAGS_keyword} ]]; then
+        DEST_DIR=${DEST_DIR}_${FLAGS_keyword}
     fi
 
     FILE_CREATE_DATE[$FILE]=$CREATE_DATE
@@ -170,7 +179,7 @@ do
     fi
 done
 
-DEST_MAX_DIR=$(basename $(find photos/raw -type d | sort | tail -n 1))
+DEST_MAX_DIR=$(basename $(find $DEST -type d | sort | tail -n 1))
 logKeyValue "destination max dir" $DEST_MAX_DIR
 
 ####################################################################################################
@@ -197,7 +206,7 @@ do
     # Validate
     if [[ ! "$SORT_KEY" =~ "^[0-9]{6}-[0-9]{6}-[A-Za-z0-9]+" ]]; then
         STATUS="invalid sort key ($SORT_KEY)"
-    elif [[ $(basename "$DEST_DIR") < "$DEST_MAX_DIR" ]]; then
+    elif [[ ${FLAGS_old} -eq ${FLAGS_FALSE} && $(basename "$DEST_DIR") < "$DEST_MAX_DIR" ]]; then
         STATUS="old"
     elif [[ -n $DEST_FILE_HASHES[$HASH] ]]; then
         STATUS="duplicate"
