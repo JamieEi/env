@@ -1,6 +1,6 @@
 #!/usr/bin/zsh --sh-word-split
 
-DEST_DIR=~/photos/backup
+DEST_DIR=~/annex/backups
 
 ####################################################################################################
 # Helper functions
@@ -33,14 +33,21 @@ FLAGS_PARENT=$0
 . shflags
 
 # Configure shflags
+DEFINE_boolean 'simulate' false 'simulate results without archiving' 's'
 
 # Parse flags & options
 FLAGS_HELP="USAGE: $0 [flags] [dirs]"
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
 
+# Require at least 1 directory
+if [[ $# < 1 ]]; then
+    flags_help
+    exit 1
+fi
+
 ####################################################################################################
-# Get file data
+# Backup
 ####################################################################################################
 
 for SRC in "$@"; do
@@ -49,18 +56,25 @@ for SRC in "$@"; do
         error "not a directory: $SRC"
     fi
 
-    ABS=$(/bin/readlink -e "$SRC")
-    BASE=$(/usr/bin/basename $ABS)
-    PREFIX=$(/usr/bin/basename $(/usr/bin/dirname $ABS))
+    # Extract parts from path
+    PARTS=( $(readlink -e "$SRC" | sed 's/\// /g') )
+    MEDIA_TYPE=photos
+    SUBTYPE=$PARTS[-3]
+    DATE=$PARTS[-1]
 
-    if [[ -z "$BASE" ]]; then
-        error "missing base: $SRC"
+    if [[ -z "$MEDIA_TYPE" ]]; then
+        error "missing media type: $SRC"
     fi
 
-    if [[ -z "$PREFIX" ]]; then
-        error "missing prefix: $SRC"
+    if [[ -z "$SUBTYPE" ]]; then
+        error "missing subtype: $SRC"
     fi
 
-    DEST=$DEST_DIR/$PREFIX_$BASE.tar.bz2
-    echo tar -cjvf $DEST $SRC >&2
+    if [[ -z "$DATE" ]]; then
+        error "missing date: $SRC"
+    fi
+
+    DEST="${DEST_DIR}/${MEDIA_TYPE}_${SUBTYPE}_${DATE}.tar.bz2"
+
+    evalOrSimulate "tar chvf $DEST $SRC"
 done
