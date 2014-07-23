@@ -11,6 +11,7 @@ PATH=~/scripts:~/bin:$PATH
 path+=~/opt/android-studio/bin
 path+=~/opt/idea/bin
 path+=~/opt/gradle/bin
+path+=~/opt/scala/bin
 path+=~/.cabal/bin
 path+=$ANDROID_SDK/tools
 path+=$ANDROID_SDK/platform-tools

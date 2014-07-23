@@ -1,6 +1,9 @@
 #!/usr/bin/zsh --sh-word-split
 
-DEST_DIR=~/annex/backups
+ANNEX=~/annex
+BACKUPS=backups
+DEST_DIR="$ANNEX/$BACKUPS"
+DEFAULT_SRC=~/annex
 
 ####################################################################################################
 # Helper functions
@@ -33,6 +36,7 @@ FLAGS_PARENT=$0
 . shflags
 
 # Configure shflags
+DEFINE_boolean 'overwrite' false 'overwrite existing archive' 'o'
 DEFINE_boolean 'simulate' false 'simulate results without archiving' 's'
 
 # Parse flags & options
@@ -40,41 +44,56 @@ FLAGS_HELP="USAGE: $0 [flags] [dirs]"
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
 
-# Require at least 1 directory
+# Parse srouce
 if [[ $# < 1 ]]; then
-    flags_help
-    exit 1
+    SRCS=$DEFAULT_SRC
+else
+    SRCS="$@"
 fi
 
 ####################################################################################################
 # Backup
 ####################################################################################################
 
-for SRC in "$@"; do
-    echo $SRC >&2
+# Calculate a prefix to remove from each base (e.g., "_home_jamie_annex")
+PREFIX=$(readlink -e $ANNEX | sed 's/\//_/g')
+
+for SRC in $SRCS; do
     if [[ ! -d "$SRC" ]]; then
         error "not a directory: $SRC"
     fi
 
-    # Extract parts from path
-    PARTS=( $(readlink -e "$SRC" | sed 's/\// /g') )
-    MEDIA_TYPE=photos
-    SUBTYPE=$PARTS[-3]
-    DATE=$PARTS[-1]
+    for DIR in $(find $SRC -name .git -prune -or -name $BACKUPS -or -type d -print); do
+        # Caculate destiation path
+        # TODO: Be smarter about removing year
+        BASE=$(echo $DIR | sed -e 's/\//_/g' -e "s/$PREFIX_//" -e 's/_20[0-9][0-9]_/_/')
+        DEST="${DEST_DIR}/${BASE}.tar.bz2"
 
-    if [[ -z "$MEDIA_TYPE" ]]; then
-        error "missing media type: $SRC"
-    fi
+        # Check for existing archive
+        if [[ -e $DEST && ${FLAGS_overwrite} -eq ${FLAGS_FALSE} ]]; then
+            STATUS='exists'
+        else
+            STATUS='ok'
+        fi
 
-    if [[ -z "$SUBTYPE" ]]; then
-        error "missing subtype: $SRC"
-    fi
+        # Create archive
+        if [[ $STATUS == 'ok' && ${FLAGS_simulate} -eq ${FLAGS_FALSE} ]]; then
+            if [[ -h $DEST ]]; then
+                git annex unlock $DEST && rm $DEST >&2
+            fi
 
-    if [[ -z "$DATE" ]]; then
-        error "missing date: $SRC"
-    fi
+            if [[ $? -eq 0 ]]; then
+                tar achvf $DEST --exclude='*.RAF' -C $DIR .
+            fi
 
-    DEST="${DEST_DIR}/${MEDIA_TYPE}_${SUBTYPE}_${DATE}.tar.bz2"
+#                git annex add $DEST && \
+#                git annex move $DEST --to glacier"
 
-    evalOrSimulate "tar chvf $DEST $SRC"
+            if [[ $? -gt 0 ]]; then
+                STATUS='error'
+            fi
+        fi
+
+        log "$SRC -> $DEST [$STATUS]"
+    done
 done
