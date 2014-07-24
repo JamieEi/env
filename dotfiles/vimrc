@@ -12,37 +12,38 @@ set nocompatible
 filetype off
 let $GIT_SSL_NO_VERIFY = 'true'
 
-set runtimepath+=~/.vim/bundle/vundle/
-call vundle#rc()
+set runtimepath+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-Bundle 'gmarik/vundle'
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => My Bundles
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" other plugins
+Plugin 'majutsushi/tagbar'
+Plugin 'desert-warm-256'
+Plugin 'fholgado/minibufexpl.vim'
+Plugin 'SuperTab-continued.'
+"Plugin 'YankRing.vim'
+"Plugin 'ervandew/screen'
+Plugin 'derekwyatt/vim-scala'
+Plugin 'othree/html5.vim'
+Plugin 'gre/play2vim'
+Plugin 'groenewege/vim-less'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'gregsexton/gitv'
+"Plugin 'msanders/snipmate'
+"Plugin 'tpope/vim-fugitive'
+"Plugin 'Lokaltog/vim-easymotion'
+"Plugin 'L9'
+"Plugin 'FuzzyFinder'
+"Plugin 'git://git.wincent.com/command-t.git' 
+Plugin 'tfnico/vim-gradle'
+"Plugin 'jngeist/vim-multimarkdown'
+Plugin 'vim-pandoc/vim-pantondoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
 
-Bundle 'majutsushi/tagbar'
-Bundle 'desert-warm-256'
-Bundle 'fholgado/minibufexpl.vim'
-Bundle 'SuperTab-continued.'
-"Bundle 'YankRing.vim'
-"Bundle 'ervandew/screen'
-Bundle 'derekwyatt/vim-scala'
-Bundle 'othree/html5.vim'
-Bundle 'gre/play2vim'
-Bundle 'groenewege/vim-less'
-Bundle 'hail2u/vim-css3-syntax'
-Bundle 'gregsexton/gitv'
-"Bundle 'msanders/snipmate'
-"Bundle 'tpope/vim-fugitive'
-"Bundle 'Lokaltog/vim-easymotion'
-"Bundle 'L9'
-"Bundle 'FuzzyFinder'
-"Bundle 'git://git.wincent.com/command-t.git' 
-Bundle 'tfnico/vim-gradle'
-"Bundle 'jngeist/vim-multimarkdown'
-Bundle 'vim-pandoc/vim-pantondoc'
-Bundle 'vim-pandoc/vim-pandoc-syntax'
+" end plugins
+call vundle#end()
 
 let g:yankring_history_dir = '~/.vim'
 let g:yankring_history_file = 'yankring_history'
