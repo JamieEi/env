@@ -54,7 +54,7 @@ DEFINE_string 'dest' $DEFAULT_DEST 'photo destination directory'
 DEFINE_string 'keyword' '' 'keyword for destination directory and file name' 'k'
 DEFINE_string 'minDate' '' 'min EXIF create date in form YYMMDD'
 DEFINE_string 'movieDest' $DEFAULT_MOVIE_DEST 'movie destination directory' 
-DEFINE_boolean 'old' false 'import files older than last import' 'o'
+DEFINE_boolean 'old' true 'import files older than last import' 'o'
 DEFINE_boolean 'simulate' false 'simulate results without copying' 's'
 
 # Parse flags & options
