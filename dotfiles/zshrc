@@ -21,7 +21,12 @@ alias ...='cd ../../../'
 alias ....='cd ../../../../'
 
 # ls
-alias ls='ls --color'
+if [[ "$(uname)" = "Darwin" ]]; then
+    alias ls='ls -G'
+else
+    alias ls='ls --color'
+fi
+
 alias la='ls -Ah'
 alias ll='ls -lh'
 alias lr='ls -tRh'
@@ -39,6 +44,8 @@ alias gw='./gradlew'
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
+setopt inc_append_history
+setopt share_history
 
 #--------------------------------------------------------------------------------
 # Completions
@@ -169,6 +176,10 @@ do
 done
 
 #--------------------------------------------------------------------------------
+# Mac
+#--------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------
 # Finale
 #--------------------------------------------------------------------------------
 
@@ -182,3 +193,15 @@ cd
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s ~/.gvm/bin/gvm-init.sh ]] && source ~/.gvm/bin/gvm-init.sh
 
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/Users/jamieei/android-sdk
+export ANDROID_NDK_REPOSITORY=/Users/jamieei/android-ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/Users/jamieei/android-sdk
+export ANDROID_NDK_REPOSITORY=/Users/jamieei/android-ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools

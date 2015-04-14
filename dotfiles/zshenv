@@ -1,5 +1,3 @@
-export ANDROID_HOME=~/opt/android-sdk-linux
-export ANDROID_SDK=~/opt/android-sdk-linux
 export EDITOR="vim"
 export VISUAL="vim"
 
@@ -13,14 +11,25 @@ path+=~/opt/idea/bin
 path+=~/opt/gradle/bin
 path+=~/opt/scala/bin
 path+=~/.cabal/bin
-path+=$ANDROID_SDK/tools
-path+=$ANDROID_SDK/platform-tools
 path+=~/opt/ant/bin
 path+=~/opt/Cloud9BrazilBuild-1.0/bin
 
 #--------------------------------------------------------------------------------
+# Local overrides
+#--------------------------------------------------------------------------------
+
+for f in ~/.zshenv_*
+do
+    source $f
+done
+
+#--------------------------------------------------------------------------------
 # Path
 #--------------------------------------------------------------------------------
+
+# Add segments that depend on overrides here
+path+=$ANDROID_SDK/tools
+path+=$ANDROID_SDK/platform-tools
 
 # Remove path duplicates
 typeset -U PATH

@@ -39,8 +39,8 @@ Plugin 'gregsexton/gitv'
 "Plugin 'git://git.wincent.com/command-t.git' 
 Plugin 'tfnico/vim-gradle'
 "Plugin 'jngeist/vim-multimarkdown'
-Plugin 'vim-pandoc/vim-pantondoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
+"Plugin 'vim-pandoc/vim-pantondoc'
+"Plugin 'vim-pandoc/vim-pandoc-syntax'
 
 " end plugins
 call vundle#end()

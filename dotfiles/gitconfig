@@ -13,20 +13,20 @@
     unstage = reset HEAD
     unrm = checkout --
     unstash = stash pop
-	dag = log --graph --decorate --all
+    dag = log --graph --decorate --all
 [color]
     ui = auto
     diff = auto
     status = auto
     branch = auto
 [core]
-	pager = less -FMRiX
+    pager = less -FMRiX
 [push]
-	default = simple
+    default = simple
 [branch]
     autosetuprebase = always
 [receive]
     denyCurrentBranch = warn
 [user]
-	name = Jamie Eisenhart
-	email = jamie@jamieei.org
+    name = Jamie Eisenhart
+    email = jamie@jamieei.org
