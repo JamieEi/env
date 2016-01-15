@@ -193,15 +193,3 @@ cd
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s ~/.gvm/bin/gvm-init.sh ]] && source ~/.gvm/bin/gvm-init.sh
 
-
-# added by setup_fb4a.sh
-export ANDROID_SDK=/Users/jamieei/android-sdk
-export ANDROID_NDK_REPOSITORY=/Users/jamieei/android-ndk
-export ANDROID_HOME=${ANDROID_SDK}
-export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
-
-# added by setup_fb4a.sh
-export ANDROID_SDK=/Users/jamieei/android-sdk
-export ANDROID_NDK_REPOSITORY=/Users/jamieei/android-ndk
-export ANDROID_HOME=${ANDROID_SDK}
-export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
