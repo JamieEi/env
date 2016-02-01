@@ -12,7 +12,6 @@ path+=~/opt/gradle/bin
 path+=~/opt/scala/bin
 path+=~/.cabal/bin
 path+=~/opt/ant/bin
-path+=~/opt/Cloud9BrazilBuild-1.0/bin
 
 #--------------------------------------------------------------------------------
 # Local overrides
