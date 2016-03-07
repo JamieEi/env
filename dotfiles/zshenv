@@ -30,6 +30,9 @@ done
 path+=$ANDROID_SDK/tools
 path+=$ANDROID_SDK/platform-tools
 
+BUILD_TOOLS=$ANDROID_SDK/build-tools
+path+=$BUILD_TOOLS/$(ls $BUILD_TOOLS | tail -n 1)
+
 # Remove path duplicates
 typeset -U PATH
 
