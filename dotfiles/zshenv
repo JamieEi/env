@@ -17,7 +17,7 @@ path+=~/opt/ant/bin
 # Local overrides
 #--------------------------------------------------------------------------------
 
-for f in ~/.zshenv_*
+for f in ~/.zshenv_*(.N)
 do
     source $f
 done
@@ -27,11 +27,13 @@ done
 #--------------------------------------------------------------------------------
 
 # Add segments that depend on overrides here
-path+=$ANDROID_SDK/tools
-path+=$ANDROID_SDK/platform-tools
+if [[ -d "$ANDROID_SDK" ]]; then
+    path+=$ANDROID_SDK/tools
+    path+=$ANDROID_SDK/platform-tools
 
-BUILD_TOOLS=$ANDROID_SDK/build-tools
-path+=$BUILD_TOOLS/$(ls $BUILD_TOOLS | tail -n 1)
+    BUILD_TOOLS=$ANDROID_SDK/build-tools
+    path+=$BUILD_TOOLS/$(ls $BUILD_TOOLS | tail -n 1)
+fi
 
 # Remove path duplicates
 typeset -U PATH
