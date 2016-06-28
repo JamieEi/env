@@ -1,6 +1,6 @@
 export EOS='192.168.1.13'
 export LUNA='192.168.1.35'
-export JAVA_HOME='/usr/lib/jvm/java-7-openjdk-amd64'
+#export JAVA_HOME='~/opt/jdk'
 
 alias civ5='env WINEPREFIX="/home/jamie/.local/share/wineprefixes/civ5_demo_steam" optirun -b primus wine C:\\windows\\command\\start.exe /Unix /home/jamie/.local/share/wineprefixes/civ5_demo_steam/dosdevices/c:/users/Public/Desktop/Steam.lnk'
 alias ck2='~/.local/share/Steam/SteamApps/common/Crusader\ Kings\ II/ck2'
