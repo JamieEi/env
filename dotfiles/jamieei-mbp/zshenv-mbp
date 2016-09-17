@@ -1,0 +1,44 @@
+export EDITOR="vim"
+export VISUAL="vim"
+
+#--------------------------------------------------------------------------------
+# Path
+#--------------------------------------------------------------------------------
+
+PATH=~/scripts:~/bin:$PATH
+path+=~/opt/android-studio/bin
+path+=~/opt/idea/bin
+path+=~/opt/gradle/bin
+path+=~/opt/scala/bin
+path+=~/.cabal/bin
+path+=~/opt/ant/bin
+
+#--------------------------------------------------------------------------------
+# Local overrides
+#--------------------------------------------------------------------------------
+
+for f in ~/.zshenv_*(.N)
+do
+    source $f
+done
+
+#--------------------------------------------------------------------------------
+# Path
+#--------------------------------------------------------------------------------
+
+# Add segments that depend on overrides here
+if [[ -d "$ANDROID_SDK" ]]; then
+    path+=$ANDROID_SDK/tools
+    path+=$ANDROID_SDK/platform-tools
+
+    BUILD_TOOLS=$ANDROID_SDK/build-tools
+    path+=$BUILD_TOOLS/$(ls $BUILD_TOOLS | tail -n 1)
+fi
+
+# Remove path duplicates
+typeset -U PATH
+
+# Remove any entries that don't exist
+# http://stackoverflow.com/questions/9347478/how-to-edit-path-variable-in-zsh
+path=($^path(N))
+
