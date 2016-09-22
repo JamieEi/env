@@ -8,7 +8,7 @@
 #--------------------------------------------------------------------------------
 
 # new commands
-alias rezsh='source ~/.zshrc'
+alias rezsh='source ~/.zshenv && source ~/.zshrc'
 alias userls='cat /etc/passwd | cut -d: -f1 | sort'
 alias groupls='cat /etc/group | cut -d: -f1 | sort'
 alias pacup='sudo pacmatic -Syu'
@@ -19,6 +19,8 @@ alias .='cd ../'
 alias ..='cd ../../'
 alias ...='cd ../../../'
 alias ....='cd ../../../../'
+alias .....='cd ../../../../../'
+alias ......='cd ../../../../../../'
 
 # ls
 if [[ "$(uname)" = "Darwin" ]]; then
@@ -176,3 +178,12 @@ cd
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s ~/.gvm/bin/gvm-init.sh ]] && source ~/.gvm/bin/gvm-init.sh
 
+export FBANDROID_DIR=/data/jamieei/fbsource
+alias quicklog_update=/data/jamieei/fbsource/scripts/quicklog/quicklog_update.sh
+alias qlu=quicklog_update
+
+# added by setup_fb4a.sh
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
