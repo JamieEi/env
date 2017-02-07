@@ -1,0 +1,13 @@
+echo begin zshrc_p50
+
+alias quicklog_update=/data/jamieei/fbsource/scripts/quicklog/quicklog_update.sh
+alias qlu=quicklog_update
+
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_HOME=${ANDROID_SDK}
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_NDK=${ANDROID_NDK_REPOSITORY}/android-ndk-r10e
+export FBANDROID_DIR=/data/jamieei/fbandroid
+
+export PATH=/opt/fbhg/bin:${PATH}
+path+=~/devtools/buck/bin
