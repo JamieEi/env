@@ -130,16 +130,6 @@ autoload -U colors && colors
 PS1="%{$fg[yellow]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[white]%}%~ %{$reset_color%}%% "
 
 #--------------------------------------------------------------------------------
-# CD bookmarks
-#--------------------------------------------------------------------------------
-
-# From http://ivan.fomentgroup.org/blog/2010/01/29/zsh-bookmarks-for-cd-change-directory-with-completion/
-# function cdb_edit() { vim ~/.cdbookmarks }
-# function cdb() { NewDir=`egrep "^$1<TAB_KEY>" ~/.cdbookmarks | sed 's/^.*<TAB_KEY>//'`; echo cd $NewDir; cd $NewDir }
-# function _cdb() { reply=(`cat ~/.cdbookmarks | sed 's/<TAB_KEY>.*$//'`); }
-# compctl -K _cdb cdb
-
-#--------------------------------------------------------------------------------
 # VirtualBox
 #--------------------------------------------------------------------------------
 
